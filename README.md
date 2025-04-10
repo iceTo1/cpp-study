@@ -35,6 +35,12 @@ git clone https://github.com/remydzn/cpp-study.git
 All files are written and tested using Visual Studio on Windows.
 
 
+## Feedback Welcome
+
+If you have suggestions, improvements, or critiques, feel free to open an issue or submit a pull request.  
+I am currently studying and always looking to improve my understanding of C++ best practices.
+
+
 ## Author
 
 Created and maintained by Seungtack Lee  
