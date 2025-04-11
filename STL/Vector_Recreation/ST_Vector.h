@@ -1,8 +1,12 @@
 #pragma once
 
 /*
+* Custom vector implementation by Seungtack Lee
 * Author: Lee, Seungtack
+* GitHub: https://github.com/remydzn/cpp-study
 * Date: Apr 8~11, 2025
+* Please do not use this code for academic dishonesty. 
+* This project is for study and reference purposes only.
 */
 
 #include <stdexcept>
@@ -35,6 +39,7 @@ public:
 
 	// Operator Overloadings
 	T& operator[] (int idx);					// Operator for random access with index
+	const T& operator[] (int idx) const;		// Constant version of Operator[]
 	vector& operator= (const vector& other);	// Operator for assigning vector to vector
 
 public:
@@ -42,14 +47,16 @@ public:
 	class reverse_iterator;						// Reverse Iterator class declaration
 	
 	// Iterator Functions
-	iterator begin();
-	iterator end();
-	iterator erase(iterator& other);
-	iterator insert(iterator pos, const T& val);
+	iterator begin();								// Return iterator that points to the first element
+	iterator begin() const;							// Constant version of begin Function
+	iterator end();									// Return iterator that points to the right of the last element
+	iterator end() const;							// Constant version of end Function
+	iterator erase(iterator& other);				// Erase the element pointed by other iterator and return the iterator pointing that position
+	iterator insert(iterator pos, const T& val);	// Insert the value to the pointed position and return iterator that points to that position
 
 	// Reverse Iterator Functions
-	reverse_iterator rbegin();
-	reverse_iterator rend();
+	reverse_iterator rbegin();	// Return iterator that goes backward, pointing to the last element
+	reverse_iterator rend();	// Return iterator that goes backward, pointing to the left of the first element
 	
 public:
 	vector();									// Default Constructor
@@ -111,7 +118,7 @@ public:
 			// Increase index.
 			++m_idx;
 
-			// Return modified iterator (if vector is empty, do not change).
+			// Return modified iterator.
 			return *this;
 		}
 
@@ -515,7 +522,7 @@ template <typename T>
 inline vector<T>::vector(int size, const T& initial_value)
 	: m_pData(nullptr)
 	, m_Size(size)
-	, m_Capacity(size * 2)
+	, m_Capacity(size)
 {
 	// Check if size is negative.
 	if (m_Size < 0)
@@ -523,7 +530,7 @@ inline vector<T>::vector(int size, const T& initial_value)
 		throw std::invalid_argument("Size cannot be negative.");
 	}
 
-	// Initialize the size of vector by given value, capacity by 2 * value.
+	// Initialize the size of vector by given value, capacity by size.
 	m_pData = new T[m_Capacity];
 
 	for (int i = 0; i < m_Size; ++i)
@@ -769,7 +776,7 @@ inline vector<T>& vector<T>::operator=(const vector<T>& other)
 
 // begin Function; return iterator that points to the first element.
 template <typename T>
-inline vector<T>::iterator vector<T>::begin()
+inline typename vector<T>::iterator vector<T>::begin()
 {
 	// return begin iterator.
 	return iterator(this, m_pData, 0);
@@ -777,7 +784,7 @@ inline vector<T>::iterator vector<T>::begin()
 
 // end Function; return iterator that points next to the last element.
 template <typename T>
-inline vector<T>::iterator vector<T>::end()
+inline typename vector<T>::iterator vector<T>::end()
 {
 	// return next to the last element.
 	return iterator(this, m_pData, m_Size);
@@ -785,7 +792,7 @@ inline vector<T>::iterator vector<T>::end()
 
 // erase Function; erase the pointed element.
 template <typename T>
-inline vector<T>::iterator vector<T>::erase(iterator& other)
+inline typename vector<T>::iterator vector<T>::erase(iterator& other)
 {
 	// Test iterator.
 	other.ValidityTest();
@@ -807,7 +814,7 @@ inline vector<T>::iterator vector<T>::erase(iterator& other)
 
 // insert Function; insert the value to the left of the pointed position.
 template <typename T>
-inline vector<T>::iterator vector<T>::insert(iterator pos, const T& val)
+inline typename vector<T>::iterator vector<T>::insert(iterator pos, const T& val)
 {
 	// if the capacity is not enough to insert,
 	if (m_Size + 1 > m_Capacity)
@@ -834,7 +841,7 @@ inline vector<T>::iterator vector<T>::insert(iterator pos, const T& val)
 
 // rbegin Function; return reverse iterator that points to the last element.
 template <typename T>
-inline vector<T>::reverse_iterator vector<T>::rbegin()
+inline typename vector<T>::reverse_iterator vector<T>::rbegin()
 {
 	// Return the last element.
 	return reverse_iterator(this, m_pData, (m_Size == 0) ? -1 : m_Size - 1);
@@ -842,19 +849,21 @@ inline vector<T>::reverse_iterator vector<T>::rbegin()
 
 // rend Function; return reverse iterator that points to the next to the first element.
 template <typename T>
-inline vector<T>::reverse_iterator vector<T>::rend()
+inline typename vector<T>::reverse_iterator vector<T>::rend()
 {
 	// Return next to the first element. 
 	return reverse_iterator(this, m_pData, -1);
 }
 
+// base Function; return forward iterator from reverse iterator.
 template<typename T>
-inline vector<T>::iterator vector<T>::reverse_iterator::base()
+inline typename vector<T>::iterator vector<T>::reverse_iterator::base()
 {
 	// Test iterator.
 	ValidityTest();
 	IndexTest();
 
-	// Return iterator.
+	// Return converted iterator.
+	// The index has to shift to the right for proper begin(), and end() iterators.
 	return iterator(m_vectorPtr, m_pData, m_idx + 1);
 }

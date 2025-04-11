@@ -1,1 +1,10 @@
+# Ignore Visual Studio user-specific and IntelliSense files
+
 .vs/
+
+*.suo
+*.VC.db
+*.ipch
+*.db-shm
+*.db-wal
+*.json
