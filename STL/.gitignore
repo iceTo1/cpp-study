@@ -19,6 +19,10 @@
 *.dll
 *.lib
 *.out
+*.idb
+*.recipe
+x64/
+Debug/
 
 # Other
 *.cache
