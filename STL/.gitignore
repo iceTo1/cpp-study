@@ -21,6 +21,7 @@
 *.out
 *.idb
 *.recipe
+*.lastbuildstate
 x64/
 Debug/
 
