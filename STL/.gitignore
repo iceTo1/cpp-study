@@ -1,10 +1,31 @@
 # Ignore Visual Studio user-specific and IntelliSense files
 
+# Visual Studio
 .vs/
-
 *.suo
+*.user
 *.VC.db
+*.VC.opendb
 *.ipch
-*.db-shm
-*.db-wal
-*.json
+
+# Build output
+*.obj
+*.log
+*.tlog
+*.tmp
+*.pdb
+*.ilk
+*.exe
+*.dll
+*.lib
+*.out
+
+# Other
+*.cache
+*.bak
+*.ncb
+*.sdf
+
+# Debug & Release folders
+Debug/
+Release/

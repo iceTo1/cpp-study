@@ -2,7 +2,7 @@
 * Custom vector implementation by Seungtack Lee
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
-* Date: Apr 8~11, 2025
+* Date: Apr 8~12, 2025
 * Please do not use this code for academic dishonesty.
 * This project is for study and reference purposes only.
 */
@@ -12,6 +12,9 @@
 
 template <typename T>
 void PrintVector(vector<T>& vec);
+
+template <typename T>
+void PrintVector_Const(const vector<T>& vec);
 
 int main()
 {
@@ -108,6 +111,14 @@ int main()
 	std::cout << "Capacity: " << myVec4.capacity() << "\nSize: " << myVec4.size() << std::endl;
 	PrintVector(myVec4);
 
+	// const vector test
+	const vector<int> constVec(11, 5);
+
+	// range-based loop test
+	std::cout << "\n<Range-Based For Loop Test>\n";
+	std::cout << "Constant Vector:\n";
+	PrintVector_Const(constVec);
+
 	return 0;
 }
 
@@ -123,6 +134,17 @@ void PrintVector(vector<T>& vec)
 	for (int i = 0; i < vec.size(); ++i)
 	{
 		std::cout << vec[i] << ", ";
+	}
+	std::cout << "\b\b }\n";
+}
+
+template <typename T>
+void PrintVector_Const(const vector<T>& vec)
+{
+	std::cout << "{ ";
+	for (const auto& val : vec)
+	{
+		std::cout << val << ", ";
 	}
 	std::cout << "\b\b }\n";
 }
