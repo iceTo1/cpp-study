@@ -50,3 +50,8 @@ GitHub: [https://github.com/remydzn](https://github.com/remydzn)
 ## License
 
 Licensed under the MIT License – see [LICENSE](./LICENSE) for details.
+
+## Note
+📌 This code was written and maintained by Seungtack Lee for educational purposes.  
+📌 If you are using this for learning, please give proper credit.  
+📌 **Unauthorized use for academic or job submissions is prohibited.**
