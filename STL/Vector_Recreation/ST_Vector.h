@@ -5,8 +5,10 @@
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
 * Date: Apr 8~12, 2025
-* Please do not use this code for academic dishonesty. 
-* This project is for study and reference purposes only.
+* 
+* This code was written and maintained by Seungtack Lee for educational purposes.  
+* If you are using this for learning, please give proper credit.  
+* Unauthorized use for academic or job submissions is prohibited.
 */
 
 #include <stdexcept>
