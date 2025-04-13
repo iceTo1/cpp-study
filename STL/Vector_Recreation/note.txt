@@ -1,0 +1,3 @@
+Turning the repository to private due to over 60 people only copying my code without attribution or context.
+Ape 13, 2025.
+Planning to reopen this repository after making at least List recreation, and Stack recreation.
