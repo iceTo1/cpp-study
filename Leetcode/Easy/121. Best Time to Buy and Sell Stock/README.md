@@ -14,7 +14,7 @@ Link to the problem: (https://leetcode.com/problems/best-time-to-buy-and-sell-st
 
 ## Solutions Description
 
-### main_index.cpp (Solved with "Greedy Algorithm")
+### solution.cpp (Solved with "Greedy Algorithm")
 - Initializes the buying price as the first element, selling profit to 0.
 - While iterating through the list, buy when the price is the lowest, sell when the profit is the highest. 
 - Declaring `profit` variable is one key point of this solution (can store current revenue, and maximum revenue to compare).

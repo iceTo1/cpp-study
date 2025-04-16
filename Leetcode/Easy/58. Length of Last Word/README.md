@@ -15,7 +15,7 @@ Link to the problem: (https://leetcode.com/problems/length-of-last-word/?envType
 
 ## Solutions Description
 
-### main_index.cpp (Solved with "Reverse Iterator")
+### solution.cpp (Solved with "Reverse Iterator")
 - Initializes the count to 0, and reverse iterator to the end of the given string.
 - If the string ends with blanks spaces, shift the iterator left to skip them (bound check if the iterator reaches the left end of the string).
 - If the iterator ignores all the blanks spaces, shift the iterator left until another blank appears while increasing the count by 1 (bound check if the iterator reaches the left end of the string).

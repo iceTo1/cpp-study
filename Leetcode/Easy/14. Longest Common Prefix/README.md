@@ -15,7 +15,7 @@ Link to the problem: (https://leetcode.com/problems/longest-common-prefix/descri
 
 ## Solutions Description
 
-### main_index.cpp (Solved by comparing elements' value with same index)
+### solution.cpp (Solved by comparing elements' value with same index)
 - If the array has only one string, return the only element.
 - Iterate through the string elements to find minimum length among them (to minimize the comparison).
 - Declare variables to temporarily storing a character value, and to store the final output string.
@@ -38,3 +38,4 @@ Link to the problem: (https://leetcode.com/problems/longest-common-prefix/descri
 ## Files
 
 - `solution.cpp`: Solution
+- `Assigning extreme value.md`: Study note about assigning extreme value

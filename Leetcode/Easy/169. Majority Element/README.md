@@ -12,7 +12,7 @@ Link to the problem: https://leetcode.com/problems/majority-element/description/
 
 ## Solutions Description
 
-### main_index.cpp (Solved with std::sort())
+### solution.cpp (Solved with std::sort())
 - Uses std::sort() function.
 - Returns the middle element of the sorted array.
 - Time Complexity: O(NlogN)

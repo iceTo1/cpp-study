@@ -19,7 +19,7 @@ void PrintVector(vector<T>& vec);
 template <typename T>
 void PrintVector_Const(const vector<T>& vec);
 
-int main()
+int main2()
 {
 	std::cout << "Welcome to ST_Vector Testing!\n";
 
