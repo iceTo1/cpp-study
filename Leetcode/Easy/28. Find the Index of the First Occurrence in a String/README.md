@@ -50,3 +50,8 @@ The feedback of the AI also taught me that:
     - It is important to keep the implementation readable.
 
 I was noticing my code is getting ugly, but I firstly wanted to solve the question. Now that I passed all cases, I will come back later, and try to solve it in a cleaner way.
+
+## Files
+
+- `solution.cpp`: Solution
+- `Assigning extreme value.md`: Study note about assigning extreme value

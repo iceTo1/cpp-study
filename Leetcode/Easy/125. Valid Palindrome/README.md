@@ -37,3 +37,19 @@ Last time, I learned that concatenating `std::string` is pricy because of memory
 However, I believed that this problem requires additional space to store correctly converted string to check.
 
 After passing all the tests, I asked a Generative AI for feedback, and it gave me a suggestion to use `reserve()` function so that it could process the memory allocation step in advance.
+
+### EDIT: Improvement
+Later, I realized that I did not have to make additional `std::string` to solve this problem.
+I tried again with just using two iterators:
+    - checking if the element is alpabet or digit
+    - comparing the lower case value of two iterators are pointing
+and it worked after some attempts.
+
+After that, I Asked for some feedback from the AI, and it gave me some additional improvements:
+    - `isdigit()` and `isalpha()` functions are under `std` namespace.
+    - `isalnum()` function can replace both of the functions above.
+
+## Files
+
+- `solution.cpp`: Solution
+- `improved_solution.cpp`: Solution with improvement
