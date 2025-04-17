@@ -4,9 +4,9 @@
 This problem is about checking if the given string is palindrome or not, after ignoring all the space and special characters.
 
 ex)
-- haystack = "A man, a plan, a canal: Panama"
+- Input: "A man, a plan, a canal: Panama"
     - Output: true (`amanaplanacanalpanama` is palindrome)
-- haystack = "race a car"
+- Input: = "race a car"
     - Output: false (`raceacar` is not palindrome)
 
 Link to the problem: (https://leetcode.com/problems/valid-palindrome/description/?envType=study-plan-v2&envId=top-interview-150)
