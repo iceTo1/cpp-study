@@ -16,6 +16,18 @@ int main()
 {
 	list<int> l;
 
+	std::cout << l.size() << std::endl;
+
+	l.push_back(2);
+	l.push_back(3);
+	l.push_back(4);
+	l.push_back(5);
+	l.push_front(1);
+
+	l.popback();
+	l.popfront();
+
+	l.clear();
 
 	return 0;
 }
