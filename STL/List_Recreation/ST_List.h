@@ -53,14 +53,501 @@ private:
 	Node<T>*	m_TailNode;		// Member pointer to store the last node.
 	int			m_Count;		// Member variable to store node count.
 public:
-	void push_back(const T& data);
-	void push_front(const T& data);
-	void popback();
-	void popfront();
-	void clear();
-	bool empty();
-	int size() const;
+	// List Functions.
+	void push_back(const T& data);	// push_back Function; Add data to the end.
+	void push_front(const T& data);	// push_front Function; Add data to the front.
+	void popback();					// pop_back Function; Remove the last data.
+	void popfront();				// pop_front Function; Remove the first data.
+	void clear();					// clear Function; Remove all data.
+	bool empty();					// empty Function; Check if the list is empty.
+	int size() const;				// size Function; Return the size of the list.
+	T& front();						// front Function; Return the first data.
+	const T& front() const;			// const front Function; Return the first data as constant.
+	T& back();						// back Function; Return the last data.
+	const T& back() const;			// const front Function; Return the last data as constant.
+
 public:
+	class iterator;									// Iterator declaration.
+	class const_iterator;							// Constant iterator declaration.
+
+	// Iterator Functions.
+	iterator begin();								// begin Function; Return iterator that points to the first data.
+	const_iterator cbegin() const;					// cbegin Function; Return constant iterator that points to the first data.
+	iterator end();									// end Function; Return iterator that points to the right of the last data.
+	const_iterator cend() const;					// cend Function; Return constant iterator that points to the right of the last data.
+	iterator erase();								// erase Function; Erase all data.
+	iterator insert(const T& data, iterator iter);	// insert Function; Insert data to the left of the iterator.
+
+	// Reverse Iterator Functions.
+	class reverse_iterator;							// Reverse iterator declaration.
+	class const_reverse_iterator;					// Constant reverse iterator declaration.
+	reverse_iterator rbegin();						// rbegin Function; Return reverse iterator that points to the last data.
+	const_reverse_iterator crbegin();				// crbegin Function; Return constant reverse iterator that points to the last data.
+	reverse_iterator rend();						// rend Function; Return reverse iterator that points to the left of the first data.
+	const_reverse_iterator crend();					// crend Function; Return constant reverse iterator that points to the left of the first data.
+
+public:
+	class iterator
+	{
+	private:
+		list*		m_pList;	// Member pointer to store address of list.
+		Node<T>*	m_pNode;	// Member pointer to store address of node.
+		bool		m_isValid;	// Member variable to test validity of iterator.
+	public:
+		// Testing functions
+		// ValidityTest Function; Check if the iterator is valid.
+		bool ValidityTest()
+		{
+			// If the list or node pointer points to nothing, or iterator is not valid,
+			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
+			{
+				throw std::runtime_error("Invalid Iterator");
+			}
+
+			// If the iterator is valid, return true.
+			return true;
+		}
+		// Operator Overloading.
+		// Operator Former *; Access the data that the iterator is pointing.
+		T& operator *()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Return the pointed value.
+			return this->m_pNode->m_Data;
+		}
+		// Operator Former ++; Increase iterator by 1.
+		iterator& operator ++()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the next node.
+			m_pNode = m_pNode->m_NextNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter ++; Increase iterator by 1 after assign operator.
+		iterator operator ++(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			iterator temp = *this;
+
+			// Increase the iterator.
+			++(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator Former --; Decrease iterator by 1.
+		iterator& operator --()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the previous node.
+			m_pNode = m_pNode->m_PrevNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter --; Decrease iterator by 1 after assign operator.
+		iterator operator --(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			iterator temp = *this;
+
+			// Decrease the iterator.
+			--(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator ==; Check if two iterators are the same.
+		bool operator ==(const iterator& iter)
+		{
+			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
+		}
+		// Operator !=; Check if two iterators are not the same.
+		bool operator != (const iterator& iter)
+		{
+			return !(*this == iter);
+		}
+
+	public:
+		// Constructor; Initialize member variables with default values.
+		iterator()
+			: m_pList(nullptr)
+			, m_pNode(nullptr)
+			, m_isValid(false)
+		{ }
+		// Parameterized constructor; Initialize the member variables with given data.
+		iterator(list* list, Node<T>* node)
+			: m_pList(list)
+			, m_pNode(node)
+			, m_isValid(false)
+		{ 
+			if (nullptr != m_pList && nullptr != m_pNode)
+			{
+				m_isValid = true;
+			}
+		}
+		// Destructor; No specific operation.
+		~iterator()
+		{ }
+	};
+
+	class const_iterator
+	{
+	private:
+		const list*		m_pList;	// Member pointer to store address of list (constant).
+		const Node<T>*	m_pNode;	// Member pointer to store address of node (constant).
+		bool			m_isValid;	// Member variable to test validity of iterator.
+	public:
+		// Testing functions
+		// ValidityTest Function; Check if the const_iterator is valid.
+		bool ValidityTest()
+		{
+			// If the list or node pointer points to nothing, or iterator is not valid,
+			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
+			{
+				throw std::runtime_error("Invalid Iterator");
+			}
+
+			// If the iterator is valid, return true.
+			return true;
+		}
+		// Operator Overloading.
+		// Operator Former *; Access the data that the const_iterator is pointing.
+		const T& operator *() const
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Return the pointed value.
+			return this->m_pNode->m_Data;
+		}
+		// Operator Former ++; Increase const_iterator by 1.
+		const_iterator& operator ++()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the next node.
+			m_pNode = m_pNode->m_NextNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter ++; Increase const_iterator by 1 after assign operator.
+		const_iterator operator ++(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			const_iterator temp = *this;
+
+			// Increase the iterator.
+			++(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator Former --; Decrease const_iterator by 1.
+		const_iterator& operator --()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the previous node.
+			m_pNode = m_pNode->m_PrevNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter --; Decrease const_iterator by 1 after assign operator.
+		const_iterator operator --(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			const_iterator temp = *this;
+
+			// Decrease the iterator.
+			--(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator ==; Check if two const_iterator are the same.
+		bool operator ==(const const_iterator& iter)
+		{
+			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
+		}
+		// Operator !=; Check if two const_iterator are not the same.
+		bool operator != (const const_iterator& iter)
+		{
+			return !(*this == iter);
+		}
+
+	public:
+		// Parameterized constructor; Initialize the member variables with given data.
+		const_iterator(const list* list, const Node<T>* node)
+			: m_pList(list)
+			, m_pNode(node)
+			, m_isValid(false)
+		{
+			if (nullptr != m_pList && nullptr != m_pNode)
+			{
+				m_isValid = true;
+			}
+		}
+		// Destructor; No specific operation.
+		~const_iterator()
+		{ }
+	};
+
+	class reverse_iterator
+	{
+	private:
+		list*		m_pList;	// Member pointer to store address of list.
+		Node<T>*	m_pNode;	// Member pointer to store address of node.
+		bool		m_isValid;	// Member variable to test validity of iterator.
+	public:
+		// Testing functions
+		// ValidityTest Function; Check if the reverse_iterator is valid.
+		bool ValidityTest()
+		{
+			// If the list or node pointer points to nothing, or iterator is not valid,
+			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
+			{
+				throw std::runtime_error("Invalid Iterator");
+			}
+
+			// If the reverse_iterator is valid, return true.
+			return true;
+		}
+		// Operator Overloading.
+		// Operator Former *; Access the data that the reverse_iterator is pointing.
+		T& operator *()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Return the pointed value.
+			return this->m_pNode->m_Data;
+		}
+		// Operator Former ++; Increase reverse_iterator by 1.
+		reverse_iterator& operator ++()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the previous node.
+			m_pNode = m_pNode->m_PrevNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter ++; Increase reverse_iterator by 1 after assign operator.
+		reverse_iterator operator ++(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			reverse_iterator temp = *this;
+
+			// Increase the iterator.
+			++(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator Former --; Decrease reverse_iterator by 1.
+		reverse_iterator& operator --()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the next node.
+			m_pNode = m_pNode->m_NextNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter --; Decrease reverse_iterator by 1 after assign operator.
+		reverse_iterator operator --(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			reverse_iterator temp = *this;
+
+			// Decrease the iterator.
+			--(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator ==; Check if two reverse_iterators are the same.
+		bool operator ==(const reverse_iterator& iter)
+		{
+			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
+		}
+		// Operator !=; Check if two reverse_iterators are not the same.
+		bool operator != (const reverse_iterator& iter)
+		{
+			return !(*this == iter);
+		}
+
+	public:
+		// Constructor; Initialize member variables with default values.
+		reverse_iterator()
+			: m_pList(nullptr)
+			, m_pNode(nullptr)
+			, m_isValid(false)
+		{
+		}
+		// Parameterized constructor; Initialize the member variables with given data.
+		reverse_iterator(list* list, Node<T>* node)
+			: m_pList(list)
+			, m_pNode(node)
+			, m_isValid(false)
+		{
+			if (nullptr != m_pList && nullptr != m_pNode)
+			{
+				m_isValid = true;
+			}
+		}
+		// Destructor; No specific operation.
+		~reverse_iterator()
+		{ }
+	};
+
+	class const_reverse_iterator
+	{
+	private:
+		const list*		m_pList;	// Member pointer to store address of list.
+		const Node<T>*	m_pNode;	// Member pointer to store address of node.
+		bool			m_isValid;	// Member variable to test validity of iterator.
+	public:
+		// Testing functions
+		// ValidityTest Function; Check if the const_reverse_iterator is valid.
+		bool ValidityTest()
+		{
+			// If the list or node pointer points to nothing, or iterator is not valid,
+			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
+			{
+				throw std::runtime_error("Invalid Iterator");
+			}
+
+			// If the reverse_iterator is valid, return true.
+			return true;
+		}
+		// Operator Overloading.
+		// Operator Former *; Access the data that the const_reverse_iterator is pointing.
+		const T& operator *() const
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Return the pointed value.
+			return this->m_pNode->m_Data;
+		}
+		// Operator Former ++; Increase const_reverse_iterator by 1.
+		const_reverse_iterator& operator ++()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the previous node.
+			m_pNode = m_pNode->m_PrevNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter ++; Increase const_reverse_iterator by 1 after assign operator.
+		const_reverse_iterator operator ++(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			const_reverse_iterator temp = *this;
+
+			// Increase the iterator.
+			++(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator Former --; Decrease const_reverse_iterator by 1.
+		const_reverse_iterator& operator --()
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Move the iterator to the next node.
+			m_pNode = m_pNode->m_NextNode;
+
+			// Return the iterator.
+			return *this;
+		}
+		// Operator Latter --; Decrease const_reverse_iterator by 1 after assign operator.
+		const_reverse_iterator operator --(int)
+		{
+			// Check iterator.
+			ValidityTest();
+
+			// Store current iterator.
+			const_reverse_iterator temp = *this;
+
+			// Decrease the iterator.
+			--(*this);
+
+			// Return the stored iterator.
+			return temp;
+		}
+		// Operator ==; Check if two const_reverse_iterators are the same.
+		bool operator ==(const const_reverse_iterator& iter)
+		{
+			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
+		}
+		// Operator !=; Check if two const_reverse_iterators are not the same.
+		bool operator != (const const_reverse_iterator& iter)
+		{
+			return !(*this == iter);
+		}
+
+	public:
+		// Parameterized constructor; Initialize the member variables with given data.
+		const_reverse_iterator(const list* list, const Node<T>* node)
+			: m_pList(list)
+			, m_pNode(node)
+			, m_isValid(false)
+		{
+			if (nullptr != m_pList && nullptr != m_pNode)
+			{
+				m_isValid = true;
+			}
+		}
+		// Destructor; No specific operation.
+		~const_reverse_iterator()
+		{ }
+	};
+
 	// Default Constructor: Initialize members to their default values.
 	list();
 	// Destructor: Release all nodes, reinitialize members to their default values.
@@ -104,6 +591,60 @@ template <typename T>
 inline int list<T>::size() const
 {
 	return m_Count;
+}
+
+// front Function; Return the first data.
+template<typename T>
+T& list<T>::front()
+{
+	// If the list is empty,
+	if (empty())
+	{
+		// Throw an exception.
+		throw std::runtime_error("List is empty");
+	}
+
+	// Return the first data.
+	return m_HeadNode->m_Data;
+}
+
+// constant front Function; Return the first data as constant.
+template<typename T>
+const T& list<T>::front() const
+{
+	// If the list is empty,
+	if (empty())
+	{
+		// Throw an exception.
+		throw std::runtime_error("List is empty");
+	}
+
+	// Return the first data.
+	return m_HeadNode->m_Data;
+}
+
+// back Function; Return the last data. 
+template <typename T>
+T& list<T>::back()
+{
+	if (empty())
+	{
+		throw std::runtime_error("List is empty");
+	}
+
+	return m_TailNode->m_Data;
+}
+
+// constant back Function; Return the last data as constant. 
+template <typename T>
+const T& list<T>::back() const
+{
+	if (empty())
+	{
+		throw std::runtime_error("List is empty");
+	}
+
+	return m_TailNode->m_Data;
 }
 
 // empty Function; Check if the list has no node inside.
