@@ -56,8 +56,8 @@ public:
 	// List Functions.
 	void push_back(const T& data);	// push_back Function; Add data to the end.
 	void push_front(const T& data);	// push_front Function; Add data to the front.
-	void popback();					// pop_back Function; Remove the last data.
-	void popfront();				// pop_front Function; Remove the first data.
+	void pop_back();				// pop_back Function; Remove the last data.
+	void pop_front();				// pop_front Function; Remove the first data.
 	void clear();					// clear Function; Remove all data.
 	bool empty();					// empty Function; Check if the list is empty.
 	int size() const noexcept;		// size Function; Return the size of the list.
@@ -410,6 +410,10 @@ public:
 			return !(*this == iter);
 		}
 
+		// Reverse iterator function
+		// base Function; Return the forward iterator based on the reverse iterator.
+		iterator base();
+
 	public:
 		// Constructor; Initialize member variables with default values.
 		reverse_iterator()
@@ -528,6 +532,10 @@ public:
 		{
 			return !(*this == iter);
 		}
+
+		// Reverse iterator function
+		// base Function; Return the forward iterator based on the reverse iterator.
+		const_iterator base();
 
 	public:
 		// Parameterized constructor; Initialize the member variables with given data.
@@ -898,7 +906,7 @@ void list<T>::push_front(const T& data)
 
 // popback Function; Remove the last node of the list.
 template <typename T>
-void list<T>::popback()
+void list<T>::pop_back()
 {
 	// If the list was empty,
 	if (empty())
@@ -936,7 +944,7 @@ void list<T>::popback()
 
 // popfront Function; Remove the first node of the list.
 template <typename T>
-void list<T>::popfront()
+void list<T>::pop_front()
 {
 	// If the list was empty,
 	if (empty())
@@ -1007,4 +1015,40 @@ void list<T>::clear()
 
 	// Reinitialize the count as 0.
 	m_Count = 0;
+}
+
+// base Function; Return the forward iterator based on the reverse iterator.
+template <typename T>
+typename list<T>::iterator list<T>::reverse_iterator::base()
+{
+	// Base points to the 'right' of the reverse iterator
+
+	// If the reverse iterator is rbegin,
+	if (this->m_pNode == this->m_pList->m_TailNode)
+	{
+		// Return end iterator for forward const iterator.
+		return iterator(this->m_pList, nullptr);
+	}
+	else
+	{
+		return iterator(this->m_pList, this->m_pNode->m_NextNode);
+	}
+}
+
+// base Function; Return the forward constant iterator based on the constant reverse iterator.
+template <typename T>
+typename list<T>::const_iterator list<T>::const_reverse_iterator::base()
+{
+	// Base points to the 'right' of the reverse iterator
+
+	// If the reverse iterator is rbegin,
+	if (this->m_pNode == this->m_pList->m_TailNode)
+	{
+		// Return end iterator for forward const iterator.
+		return const_iterator(this->m_pList, nullptr);
+	}
+	else
+	{
+		return const_iterator(this->m_pList, this->m_pNode->m_NextNode);
+	}
 }
