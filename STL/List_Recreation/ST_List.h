@@ -4,7 +4,7 @@
 * Custom list implementation by Seungtack Lee
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
-* Date: Apr 16~, 2025
+* Date: Apr 16~19, 2025
 *
 * This code was written and maintained by Seungtack Lee for educational purposes.
 * If you are using this for learning, please give proper credit.
@@ -60,31 +60,32 @@ public:
 	void popfront();				// pop_front Function; Remove the first data.
 	void clear();					// clear Function; Remove all data.
 	bool empty();					// empty Function; Check if the list is empty.
-	int size() const;				// size Function; Return the size of the list.
+	int size() const noexcept;		// size Function; Return the size of the list.
 	T& front();						// front Function; Return the first data.
 	const T& front() const;			// const front Function; Return the first data as constant.
 	T& back();						// back Function; Return the last data.
 	const T& back() const;			// const front Function; Return the last data as constant.
 
 public:
-	class iterator;									// Iterator declaration.
-	class const_iterator;							// Constant iterator declaration.
+	class iterator;			// Iterator declaration.
+	class const_iterator;	// Constant iterator declaration.
 
 	// Iterator Functions.
-	iterator begin();								// begin Function; Return iterator that points to the first data.
-	const_iterator cbegin() const;					// cbegin Function; Return constant iterator that points to the first data.
-	iterator end();									// end Function; Return iterator that points to the right of the last data.
-	const_iterator cend() const;					// cend Function; Return constant iterator that points to the right of the last data.
-	iterator erase();								// erase Function; Erase all data.
-	iterator insert(const T& data, iterator iter);	// insert Function; Insert data to the left of the iterator.
+	iterator begin();										// begin Function; Return iterator that points to the first data.
+	const_iterator cbegin() const;							// cbegin Function; Return constant iterator that points to the first data.
+	iterator end();											// end Function; Return iterator that points to the right of the last data.
+	const_iterator cend() const;							// cend Function; Return constant iterator that points to the right of the last data.
+	iterator erase(const iterator& pos);					// erase Function; Erase the data that the given iterator is pointing.
+	iterator insert(const T& data, const iterator& iter);	// insert Function; Insert data to the left of the iterator.
+	
+	class reverse_iterator;			// Reverse iterator declaration.
+	class const_reverse_iterator;	// Constant reverse iterator declaration.
 
 	// Reverse Iterator Functions.
-	class reverse_iterator;							// Reverse iterator declaration.
-	class const_reverse_iterator;					// Constant reverse iterator declaration.
-	reverse_iterator rbegin();						// rbegin Function; Return reverse iterator that points to the last data.
-	const_reverse_iterator crbegin();				// crbegin Function; Return constant reverse iterator that points to the last data.
-	reverse_iterator rend();						// rend Function; Return reverse iterator that points to the left of the first data.
-	const_reverse_iterator crend();					// crend Function; Return constant reverse iterator that points to the left of the first data.
+	reverse_iterator rbegin();				// rbegin Function; Return reverse iterator that points to the last data.
+	const_reverse_iterator crbegin() const;	// crbegin Function; Return constant reverse iterator that points to the last data.
+	reverse_iterator rend();				// rend Function; Return reverse iterator that points to the left of the first data.
+	const_reverse_iterator crend() const;	// crend Function; Return constant reverse iterator that points to the left of the first data.
 
 public:
 	class iterator
@@ -96,16 +97,13 @@ public:
 	public:
 		// Testing functions
 		// ValidityTest Function; Check if the iterator is valid.
-		bool ValidityTest()
+		void ValidityTest() const
 		{
 			// If the list or node pointer points to nothing, or iterator is not valid,
 			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
 			{
 				throw std::runtime_error("Invalid Iterator");
 			}
-
-			// If the iterator is valid, return true.
-			return true;
 		}
 		// Operator Overloading.
 		// Operator Former *; Access the data that the iterator is pointing.
@@ -172,12 +170,12 @@ public:
 			return temp;
 		}
 		// Operator ==; Check if two iterators are the same.
-		bool operator ==(const iterator& iter)
+		bool operator ==(const iterator& iter) const
 		{
 			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
 		}
 		// Operator !=; Check if two iterators are not the same.
-		bool operator != (const iterator& iter)
+		bool operator != (const iterator& iter) const
 		{
 			return !(*this == iter);
 		}
@@ -290,12 +288,12 @@ public:
 			return temp;
 		}
 		// Operator ==; Check if two const_iterator are the same.
-		bool operator ==(const const_iterator& iter)
+		bool operator ==(const const_iterator& iter) const
 		{
 			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
 		}
 		// Operator !=; Check if two const_iterator are not the same.
-		bool operator != (const const_iterator& iter)
+		bool operator != (const const_iterator& iter) const
 		{
 			return !(*this == iter);
 		}
@@ -402,12 +400,12 @@ public:
 			return temp;
 		}
 		// Operator ==; Check if two reverse_iterators are the same.
-		bool operator ==(const reverse_iterator& iter)
+		bool operator ==(const reverse_iterator& iter) const
 		{
 			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
 		}
 		// Operator !=; Check if two reverse_iterators are not the same.
-		bool operator != (const reverse_iterator& iter)
+		bool operator != (const reverse_iterator& iter) const
 		{
 			return !(*this == iter);
 		}
@@ -521,12 +519,12 @@ public:
 			return temp;
 		}
 		// Operator ==; Check if two const_reverse_iterators are the same.
-		bool operator ==(const const_reverse_iterator& iter)
+		bool operator ==(const const_reverse_iterator& iter) const
 		{
 			return (this->m_pNode == iter.m_pNode && this->m_pList == iter.m_pList);
 		}
 		// Operator !=; Check if two const_reverse_iterators are not the same.
-		bool operator != (const const_reverse_iterator& iter)
+		bool operator != (const const_reverse_iterator& iter) const
 		{
 			return !(*this == iter);
 		}
@@ -588,7 +586,7 @@ list<T>::~list()
 
 // size Function; Return the node count.
 template <typename T>
-inline int list<T>::size() const
+inline int list<T>::size() const noexcept
 {
 	return m_Count;
 }
@@ -645,6 +643,197 @@ const T& list<T>::back() const
 	}
 
 	return m_TailNode->m_Data;
+}
+
+// begin Function; Return iterator that points to the first data.
+template<typename T>
+typename list<T>::iterator list<T>::begin()
+{
+	// If the list is empty,
+	if (empty())
+	{
+		// Return iterator that points to nothing.
+		return iterator(nullptr, nullptr);
+	}
+	// If the list is not empty, return iterator that points to the first node.
+	return iterator(this, this->m_HeadNode);
+}
+
+// cbegin Function; Return constant iterator that points to the first data.
+template<typename T>
+typename list<T>::const_iterator list<T>::cbegin() const
+{
+	// Return the const_iterator that points to the first node (if empty, it will point to nothing).
+	return const_iterator(this, this->m_HeadNode);
+}
+
+// end Function; Return iterator that points to the right of the last data.
+template<typename T>
+typename list<T>::iterator list<T>::end()
+{
+	// Return iterator that points to nothing.
+	return iterator(this, nullptr);
+}
+
+// cend Function; Return constant iterator that points to the right of the last data.
+template<typename T>
+typename list<T>::const_iterator list<T>::cend() const
+{
+	// Return const_iterator that points to nothing.
+	return const_iterator(this, nullptr);
+}
+
+// erase Function; Erase the data that the given iterator is pointing.
+template<typename T>
+typename list<T>::iterator list<T>::erase(const iterator& pos)
+{
+	// If the list is already empty,
+	if (empty())
+	{
+		// Throw an exception.
+		throw std::runtime_error("List is empty");
+	}
+
+	// Test iterator.
+	pos.ValidityTest();
+
+	// Declare a node pointer to store the node the given iteator is pointing.
+	Node<T>* deleteNode = pos.m_pNode;
+	// Declare a node pointer to store the deleting node's next node.
+	Node<T>* nextNode = pos.m_pNode->m_NextNode;
+	// Declare a node pointer to store the deleting node's previous node.
+	Node<T>* prevNode = pos.m_pNode->m_PrevNode;
+
+	// If erasing the first node,
+	if (!prevNode)
+	{
+		m_HeadNode = nextNode;
+	}
+	// If erasing the last node,
+	else if (!nextNode)
+	{
+		m_TailNode = prevNode;
+	}
+	// If erasing the middle node,
+	else
+	{
+		// Set the next node's previous node as the previous node.
+		nextNode->m_PrevNode = prevNode;
+		// Set the previous node's next node as the next node.
+		prevNode->m_NextNode = nextNode;
+	}
+
+	// Release memory of the deleting node.
+	delete deleteNode;
+	// Prevent dangling pointer.
+	deleteNode = nullptr;
+
+	// Decrease the node count.
+	--m_Count;
+
+	return iterator(this, nextNode);
+}
+
+// insert Function; Insert data to the left of the iterator.
+template<typename T>
+typename list<T>::iterator list<T>::insert(const T& data, const iterator& iter)
+{
+	// Check iterator.
+	iter.ValidityTest();
+
+	// Declare a node pointer to store the pointed node.
+	Node<T>* currNode;
+	// Declare a node pointer to store the pointed node's previous node.
+	Node<T>* prevNode;
+	// If the iterator was end iterator,
+	if (nullptr == iter.m_pNode)
+	{
+		// Set current node to nullptr.
+		currNode = nullptr;
+		// Set previous node to tail node.
+		prevNode = m_TailNode;
+	}
+	// If the iterator was begin iterator,
+	else if (nullptr == iter.m_pNode->m_PrevNode)
+	{
+		// Set current node to head node.
+		currNode = m_HeadNode;
+		// Set previous node to nullptr.
+		prevNode = nullptr;
+	}
+	// If the iterator was pointing to the middle node,
+	else
+	{
+		// Set current node to pointed node.
+		currNode = iter.m_pNode;
+		// Set previous node to previous node of pointed node.
+		prevNode = iter.m_pNode->m_PrevNode;
+	}
+
+	// Declare a new node with the given data.
+	Node<T>* newNode = new Node(data, currNode, prevNode);
+
+	// If the current node is pointing to nothing (end iterator),
+	if (!currNode)
+	{
+		// Update the tail node as the new node.
+		m_TailNode = newNode;
+	}
+	// If the current node is in the middle,
+	else
+	{
+		// Reconnect the current node's previous node to the new node.
+		currNode->m_PrevNode = newNode;
+	}
+	// If the previous node is pointing to nothing (begin iterator),
+	if (!prevNode)
+	{
+		// Update the head node as the new node.
+		m_HeadNode = newNode;
+	}
+	// If the previous node is in the middle,
+	else
+	{
+		// Reconnect the previous node's next node to the new node.
+		prevNode->m_NextNode = newNode;
+	}
+
+	// Increase the node count.
+	++m_Count;
+
+	return iterator(this, newNode);
+}
+
+// rbegin Function; Return reverse iterator that points to the last data.
+template<typename T>
+typename list<T>::reverse_iterator list<T>::rbegin()
+{
+	// Return reverse iterator that points to the last node.
+	return reverse_iterator(this, this->m_TailNode);
+}
+
+// crbegin Function; Return constant reverse iterator that points to the last data.
+template<typename T>
+typename list<T>::const_reverse_iterator list<T>::crbegin() const
+{
+	// Return reverse iterator that points to the last node.
+	return const_reverse_iterator(this, this->m_TailNode);
+}
+
+// rend Function; Return reverse iterator that points to the left of the first data.
+template<typename T>
+typename list<T>::reverse_iterator list<T>::rend()
+{
+	// Return reverse iterator that points to the left of the first node.
+	return reverse_iterator(this, nullptr);
+}
+
+// crend Function; Return constant reverse iterator that points to the left of the first data.
+template<typename T>
+typename list<T>::const_reverse_iterator list<T>::crend() const
+{
+	// Return reverse iterator that points to the left of the first node.
+	return const_reverse_iterator(this, nullptr);
 }
 
 // empty Function; Check if the list has no node inside.
@@ -795,29 +984,27 @@ void list<T>::clear()
 		return;
 	}
 	// If the list is not empty,
-	else
+
+	// Create a node pointer for pointing before deleting.
+	Node<T>* pointNode = m_HeadNode;
+	// Iterate through the list.
+	while (nullptr != pointNode)
 	{
-		// Create a node pointer for pointing before deleting.
-		Node<T>* pointNode = m_HeadNode;
-		// Iterate through the list.
-		while (nullptr != pointNode)
-		{
-			// Create a node for deletion.
-			Node<T>* deleteNode = pointNode;
-			// Advance the pointing node.
-			pointNode = pointNode->m_NextNode;
-			// Release memory of the delete node.
-			delete deleteNode;
-		}
-
-		// Update the head and tail nodes to point nothing.
-		m_HeadNode = nullptr;
-		m_TailNode = nullptr;
-
-		// Update the point node to point nothing.
-		pointNode = nullptr;
-
-		// Reinitialize the count as 0.
-		m_Count = 0;
+		// Create a node for deletion.
+		Node<T>* deleteNode = pointNode;
+		// Advance the pointing node.
+		pointNode = pointNode->m_NextNode;
+		// Release memory of the delete node.
+		delete deleteNode;
 	}
+
+	// Update the head and tail nodes to point nothing.
+	m_HeadNode = nullptr;
+	m_TailNode = nullptr;
+
+	// Update the point node to point nothing.
+	pointNode = nullptr;
+
+	// Reinitialize the count as 0.
+	m_Count = 0;
 }
