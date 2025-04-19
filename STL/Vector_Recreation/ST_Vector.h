@@ -318,7 +318,7 @@ public:
 
 		// Operator overload
 		// constant Operator *; Access the value like pointer; Cannot overwrite the constant data type.
-		const T& operator* ()
+		const T& operator* () const
 		{
 			// Test iterator.
 			ValidityTest();
@@ -715,7 +715,7 @@ public:
 
 // Default Constructor; capacity to 0.
 template <typename T>
-inline vector<T>::vector()
+vector<T>::vector()
 	: m_pData(nullptr)
 	, m_Size(0)
 	, m_Capacity(0)
@@ -726,7 +726,7 @@ inline vector<T>::vector()
 
 // Parameterized Constructor; initialize with size, value.
 template <typename T>
-inline vector<T>::vector(int size, const T& initial_value)
+vector<T>::vector(int size, const T& initial_value)
 	: m_pData(nullptr)
 	, m_Size(size)
 	, m_Capacity(size)
@@ -748,13 +748,13 @@ inline vector<T>::vector(int size, const T& initial_value)
 
 // Parameterized Constructor; initialize size only, value to "default of T type".
 template <typename T>
-inline vector<T>::vector(int size)
+vector<T>::vector(int size)
 	: vector(size, T())
 { }
 
 // Copy Constructor; initialize with same values of other.
 template <typename T>
-inline vector<T>::vector(const vector & other)
+vector<T>::vector(const vector & other)
 	: m_pData(nullptr)
 	, m_Size(other.m_Size)
 	, m_Capacity(other.m_Capacity)
@@ -771,7 +771,7 @@ inline vector<T>::vector(const vector & other)
 
 // Destructor; free memory, reinitialize pointer.
 template <typename T>
-inline vector<T>::~vector()
+vector<T>::~vector()
 {
 	// Free allocated memories.
 	delete[] m_pData; 
@@ -784,7 +784,7 @@ inline vector<T>::~vector()
 
 // push_back Funtion; add data to the end.
 template <typename T>
-inline void vector<T>::push_back(const T& data)
+void vector<T>::push_back(const T& data)
 {
 	// if vector size is 0,
 	if (0 == this->m_Capacity)
@@ -806,7 +806,7 @@ inline void vector<T>::push_back(const T& data)
 
 // pop_back Function; remove last data.
 template <typename T>
-inline void vector<T>::pop_back()
+void vector<T>::pop_back()
 {
 	// if the vector is empty,
 	if (this->empty())
@@ -824,7 +824,7 @@ inline void vector<T>::pop_back()
 
 // resize Function; resize the capacity of the vector, maintain the elements.
 template <typename T>
-inline void vector<T>::resize(int resize_count)
+void vector<T>::resize(int resize_count)
 {
 	// if resize_count is smaller than capacity,
 	if (resize_count <= this->m_Capacity)
@@ -852,7 +852,7 @@ inline void vector<T>::resize(int resize_count)
 
 // front Function; returns the first element. 
 template <typename T>
-inline T& vector<T>::front()
+T& vector<T>::front()
 {
 	// if the vector is empty,
 	if (this->empty())
@@ -867,7 +867,7 @@ inline T& vector<T>::front()
 
 // back Function; returns the last element.
 template <typename T>
-inline T& vector<T>::back()
+T& vector<T>::back()
 {
 	// if the vector is empty,
 	if (this->empty())
@@ -881,7 +881,7 @@ inline T& vector<T>::back()
 
 // at Function; returns data at "idx" index, checks bound.
 template <typename T>
-inline T& vector<T>::at(int idx)
+T& vector<T>::at(int idx)
 {
 	// if the vector is empty,
 	if (this->empty())
@@ -903,7 +903,7 @@ inline T& vector<T>::at(int idx)
 
 // at const Function; at Function for constant objects.
 template <typename T>
-inline const T& vector<T>::at(int idx) const
+const T& vector<T>::at(int idx) const
 {
 	// if the vector is empty,
 	if (this->empty())
@@ -924,7 +924,7 @@ inline const T& vector<T>::at(int idx) const
 
 // clear Function; erase all data by initializing to default value, capacity stays the same.
 template <typename T>
-inline void vector<T>::clear()
+void vector<T>::clear()
 {
 	// if the vector is empty,
 	if (empty())
@@ -947,7 +947,7 @@ inline void vector<T>::clear()
 
 // Operator []; returns data at "idx" index.
 template <typename T>
-inline T& vector<T>::operator[](int idx)
+T& vector<T>::operator[](int idx)
 {
 	// operator[] omits bound check for faster performance with risk; undefined behavior.
 	// return "idx"th data.
@@ -956,7 +956,7 @@ inline T& vector<T>::operator[](int idx)
 
 // constant Operator[]; Constant version of Operator[]
 template <typename T>
-inline const T& vector<T>::operator[] (int idx) const
+const T& vector<T>::operator[] (int idx) const
 {
 	// operator[] omits bound check for faster performance with risk; undefined behavior.
 	// Return the data of given index.
@@ -965,7 +965,7 @@ inline const T& vector<T>::operator[] (int idx) const
 
 // Operator =; assigns the other vector to this vector.
 template <typename T>
-inline vector<T>& vector<T>::operator=(const vector<T>& other)
+vector<T>& vector<T>::operator=(const vector<T>& other)
 {
 	// if the other vector is the same as this vector,
 	if (this == &other)
@@ -992,7 +992,7 @@ inline vector<T>& vector<T>::operator=(const vector<T>& other)
 
 // begin Function; return iterator that points to the first element.
 template <typename T>
-inline typename vector<T>::iterator vector<T>::begin()
+typename vector<T>::iterator vector<T>::begin()
 {
 	// return begin iterator.
 	return iterator(this, m_pData, 0);
@@ -1000,14 +1000,14 @@ inline typename vector<T>::iterator vector<T>::begin()
 
 // constant begin Function; constant version of begin Function.
 template<typename T>
-inline typename vector<T>::const_iterator vector<T>::begin() const
+typename vector<T>::const_iterator vector<T>::begin() const
 {
 	return const_iterator(this, m_pData, 0);
 }
 
 // end Function; return iterator that points next to the last element.
 template <typename T>
-inline typename vector<T>::iterator vector<T>::end()
+typename vector<T>::iterator vector<T>::end()
 {
 	// return next to the last element.
 	return iterator(this, m_pData, m_Size);
@@ -1015,14 +1015,14 @@ inline typename vector<T>::iterator vector<T>::end()
 
 // constant end Function; constant version of end Function.
 template<typename T>
-inline typename vector<T>::const_iterator vector<T>::end() const
+typename vector<T>::const_iterator vector<T>::end() const
 {
 	return const_iterator(this, m_pData, m_Size);
 }
 
 // erase Function; erase the pointed element.
 template <typename T>
-inline typename vector<T>::iterator vector<T>::erase(iterator& other)
+typename vector<T>::iterator vector<T>::erase(iterator& other)
 {
 	// Test iterator.
 	other.ValidityTest();
@@ -1044,13 +1044,20 @@ inline typename vector<T>::iterator vector<T>::erase(iterator& other)
 
 // insert Function; insert the value to the left of the pointed position.
 template <typename T>
-inline typename vector<T>::iterator vector<T>::insert(iterator pos, const T& val)
+typename vector<T>::iterator vector<T>::insert(iterator pos, const T& val)
 {
-	// if the capacity is not enough to insert,
+	// If the capacity is not enough to insert,
 	if (m_Size + 1 > m_Capacity)
 	{
 		// resize the capacity.
 		resize(m_Capacity * 2);
+	}
+
+	// If the index of the iterator is out of bound,
+	if (pos.m_idx < 0 || pos.m_idx > m_Size)
+	{
+		// Throw an exception.
+		throw std::out_of_range("Invalid index");
 	}
 
 	// Shift elements from the pointed element,
@@ -1071,7 +1078,7 @@ inline typename vector<T>::iterator vector<T>::insert(iterator pos, const T& val
 
 // rbegin Function; return reverse iterator that points to the last element.
 template <typename T>
-inline typename vector<T>::reverse_iterator vector<T>::rbegin()
+typename vector<T>::reverse_iterator vector<T>::rbegin()
 {
 	// Return the last element.
 	return reverse_iterator(this, m_pData, (m_Size == 0) ? -1 : m_Size - 1);
@@ -1079,7 +1086,7 @@ inline typename vector<T>::reverse_iterator vector<T>::rbegin()
 
 // rend Function; return reverse iterator that points to the next to the first element.
 template <typename T>
-inline typename vector<T>::reverse_iterator vector<T>::rend()
+typename vector<T>::reverse_iterator vector<T>::rend()
 {
 	// Return next to the first element. 
 	return reverse_iterator(this, m_pData, -1);
@@ -1087,7 +1094,7 @@ inline typename vector<T>::reverse_iterator vector<T>::rend()
 
 // base Function; return forward iterator from reverse iterator.
 template<typename T>
-inline typename vector<T>::iterator vector<T>::reverse_iterator::base()
+typename vector<T>::iterator vector<T>::reverse_iterator::base()
 {
 	// Test iterator.
 	ValidityTest();
