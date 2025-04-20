@@ -4,13 +4,20 @@
 * Custom list implementation by Seungtack Lee
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
-* Date: Apr 16~19, 2025
+* Date: Apr 16~20, 2025
 *
-* This code was written and maintained by Seungtack Lee for educational purposes.
+* <Authorship Verification>
+* This section exists to verify that this project was originally created by Seungtack Lee.
+* This warning is now included because over 60 individuals have copied this code without visiting the original GitHub repository, 
+* which suggests the code has been redistributed without proper credit.  
 * If you are using this for learning, please give proper credit.
+* 
 * Unauthorized use for academic or job submissions is prohibited.
+* If you received this code from a source other than my GitHub repository, please let me know:
+* https://github.com/remydzn
 */
 
+#define STList_20250420
 #include <stdexcept>
 
 // Declaration of list class
@@ -436,6 +443,15 @@ public:
 		// Destructor; No specific operation.
 		~reverse_iterator()
 		{ }
+
+		static bool isAuthentic()
+		{
+		#ifdef STList_20250420
+			return true;
+		#else
+			return false;
+		#endif
+		}
 	};
 
 	class const_reverse_iterator

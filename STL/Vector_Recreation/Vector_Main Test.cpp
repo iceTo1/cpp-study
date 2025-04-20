@@ -13,6 +13,7 @@
 #include "ST_Vector.h"
 #include <iostream>
 
+/*
 template <typename T>
 void PrintVector(vector<T>& vec);
 
@@ -151,3 +152,5 @@ void PrintVector_Const(const vector<T>& vec)
 	}
 	std::cout << "\b\b }\n";
 }
+*/
+

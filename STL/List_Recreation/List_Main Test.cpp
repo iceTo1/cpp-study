@@ -24,8 +24,8 @@ int main()
 	l.push_back(5);
 	l.push_front(1);
 
-	l.popback();
-	l.popfront();
+	l.pop_back();
+	l.pop_front();
 
 	l.clear();
 

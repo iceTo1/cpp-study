@@ -5,12 +5,19 @@
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
 * Date: Apr 8~12, 2025
+*
+* <Authorship Verification>
+* This section exists to verify that this project was originally created by Seungtack Lee.
+* This warning is now included because over 60 individuals have copied this code without visiting the original GitHub repository,
+* which suggests the code has been redistributed without proper credit.
+* If you are using this for learning, please give proper credit.
 * 
-* This code was written and maintained by Seungtack Lee for educational purposes.  
-* If you are using this for learning, please give proper credit.  
 * Unauthorized use for academic or job submissions is prohibited.
+* If you received this code from a source other than my GitHub repository, please let me know:
+* https://github.com/remydzn
 */
 
+#define STVec_20250420
 #include <stdexcept>
 
 template <typename T>
@@ -928,6 +935,15 @@ public:
 		// Declare friend to access private members of vector.
 		friend class vector;
 	};
+
+	static bool isAuthentic()
+	{
+	#ifdef STVec_20250420
+		return true;
+	#else
+		return false;
+	#endif
+	}
 };
 
 // Default Constructor; capacity to 0.
