@@ -47,12 +47,7 @@ void PrintVector(const vector<T>& vec)
 void Vector_Test()
 {
 	int option;
-	vector<int> test;
-	test.push_back(1);
-	test.push_back(2);
-	test.push_back(3);
-	test.push_back(4);
-	test.push_back(5);
+	vector<int> test = { 1, 2, 3, 4, 5 };
 
 	while (true)
 	{
@@ -60,7 +55,7 @@ void Vector_Test()
 		std::cout << "\n\n\t\t\t\t\t***** Vector Recreation Test *****\n\n";
 		std::cout << "Current vector:\n";
 		PrintVector(test);
-		std::cout << "1. push_back    2. pop_back    3. front    4. back    5. at    6. print\n";
+		std::cout << "1. push_back    2. pop_back    3. front    4. back    5. at    6. print    0. exit\n";
 		std::cout << "Choose: ";
 		std::cin >> option;
 
@@ -93,8 +88,10 @@ void Vector_Test()
 			std::cout << "Vector: ";
 			PrintVector(test);
 			break;
+		case 0:
+			return;
 		default:
-			std::cout << "Choose valid option (1~6)";
+			std::cout << "Choose valid option (0~6)";
 		}
 		std::cout << "\n\n";
 		system("pause");

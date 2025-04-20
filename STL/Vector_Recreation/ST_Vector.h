@@ -77,6 +77,7 @@ public:
 	vector();									// Default Constructor
 	vector(int size, const T& initial_value);	// Initialize with size and value
 	vector(int size);							// Initialize with size only
+	vector(std::initializer_list<T> init);		// Initialize with list
 	vector(const vector& other);				// Copy Constructor
 	~vector();									// Destructor
 
@@ -986,6 +987,17 @@ template <typename T>
 vector<T>::vector(int size)
 	: vector(size, T())
 { }
+
+// List initializing Constructor; Initialize with list
+template<typename T>
+vector<T>::vector(std::initializer_list<T> init)
+	:vector()
+{
+	for (const T& val : init)
+	{
+		push_back(val);
+	}
+}
 
 // Copy Constructor; initialize with same values of other.
 template <typename T>

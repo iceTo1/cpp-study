@@ -573,6 +573,8 @@ public:
 
 	// Default Constructor: Initialize members to their default values.
 	list();
+	// List initializing Constructor: Initialize members with a list.
+	list(std::initializer_list<T> init);
 	// Destructor: Release all nodes, reinitialize members to their default values.
 	~list();
 
@@ -593,6 +595,16 @@ list<T>::list()
 	, m_TailNode(nullptr)
 	, m_Count(0)
 { }
+
+template<typename T>
+list<T>::list(std::initializer_list<T> init)
+	: list()
+{
+	for (const T& val : init)
+	{
+		push_back(val);
+	}
+}
 
 // Destructor: Release all nodes, reinitialize members to their default values.
 template <typename T>

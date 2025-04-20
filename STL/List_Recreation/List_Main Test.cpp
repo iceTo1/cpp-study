@@ -56,12 +56,7 @@ void List_Test()
 {
 	// Setup
 	int option;
-	list<int> test;
-	test.push_back(1);
-	test.push_back(2);
-	test.push_back(3);
-	test.push_back(4);
-	test.push_back(5);
+	list<int> test = { 1, 2, 3, 4, 5 };
 
 	// Test
 	while (true)
@@ -70,7 +65,7 @@ void List_Test()
 		std::cout << "\n\n\t\t\t\t***** List Recreation Test *****\n\n";
 		std::cout << "Current list:\n";
 		PrintList(test);
-		std::cout << "1. push_back    2. push_front    3.pop_back    4. pop_front    5. back    6. front    7. print    8. insert\n";
+		std::cout << "1. push_back    2. push_front    3.pop_back    4. pop_front    5. back    6. front    7. print    8. insert    0. exit\n";
 		std::cout << "Choose: ";
 		std::cin >> option;
 
@@ -123,6 +118,8 @@ void List_Test()
 
 			break;
 		}
+		case 0:
+			return;
 		default:
 			std::cout << "Choose valid option (1~8)";
 		}
