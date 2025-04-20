@@ -7,16 +7,14 @@
 *
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.
-* This warning is now included because over 60 individuals have copied this code without visiting the original GitHub repository,
-* which suggests the code has been redistributed without proper credit.
-* If you are using this for learning, please give proper credit.
+* Please leave a star when you are cloning this code.
 *
 * <Attribution>
 * The structure of the test code was inspired by the educational content from the following source:
 * Channel: withhoneyc
 * URL: https://www.youtube.com/@withhoneyc
 * 
-* Unauthorized use for academic or job submissions is prohibited.
+* Unauthorized use in academic or professional submissions without proper credit is prohibited.
 * If you received this code from a source other than my GitHub repository, please let me know:
 * https://github.com/remydzn
 */
