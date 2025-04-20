@@ -66,7 +66,7 @@ public:
 	void pop_back();				// pop_back Function; Remove the last data.
 	void pop_front();				// pop_front Function; Remove the first data.
 	void clear();					// clear Function; Remove all data.
-	bool empty();					// empty Function; Check if the list is empty.
+	bool empty() const;				// empty Function; Check if the list is empty.
 	int size() const noexcept;		// size Function; Return the size of the list.
 	T& front();						// front Function; Return the first data.
 	const T& front() const;			// const front Function; Return the first data as constant.
@@ -79,8 +79,10 @@ public:
 
 	// Iterator Functions.
 	iterator begin();										// begin Function; Return iterator that points to the first data.
+	const_iterator begin() const;							// begin const Function; Const version of begin() for range-based for loop.
 	const_iterator cbegin() const;							// cbegin Function; Return constant iterator that points to the first data.
 	iterator end();											// end Function; Return iterator that points to the right of the last data.
+	const_iterator end() const;								// end const Function; Const version of end() for range-based for loop.
 	const_iterator cend() const;							// cend Function; Return constant iterator that points to the right of the last data.
 	iterator erase(const iterator& pos);					// erase Function; Erase the data that the given iterator is pointing.
 	iterator insert(const T& data, const iterator& iter);	// insert Function; Insert data to the left of the iterator.
@@ -208,6 +210,8 @@ public:
 		// Destructor; No specific operation.
 		~iterator()
 		{ }
+
+		friend class list<T>;	// Allow access to private members by list.
 	};
 
 	class const_iterator
@@ -219,7 +223,7 @@ public:
 	public:
 		// Testing functions
 		// ValidityTest Function; Check if the const_iterator is valid.
-		bool ValidityTest()
+		bool ValidityTest() const
 		{
 			// If the list or node pointer points to nothing, or iterator is not valid,
 			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
@@ -320,6 +324,8 @@ public:
 		// Destructor; No specific operation.
 		~const_iterator()
 		{ }
+
+		friend class list<T>;	// Allow access to private members by list.
 	};
 
 	class reverse_iterator
@@ -331,7 +337,7 @@ public:
 	public:
 		// Testing functions
 		// ValidityTest Function; Check if the reverse_iterator is valid.
-		bool ValidityTest()
+		bool ValidityTest() const
 		{
 			// If the list or node pointer points to nothing, or iterator is not valid,
 			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
@@ -444,14 +450,7 @@ public:
 		~reverse_iterator()
 		{ }
 
-		static bool isAuthentic()
-		{
-		#ifdef STList_20250420
-			return true;
-		#else
-			return false;
-		#endif
-		}
+		friend class list<T>;	// Allow access to private members by list.
 	};
 
 	class const_reverse_iterator
@@ -463,7 +462,7 @@ public:
 	public:
 		// Testing functions
 		// ValidityTest Function; Check if the const_reverse_iterator is valid.
-		bool ValidityTest()
+		bool ValidityTest() const
 		{
 			// If the list or node pointer points to nothing, or iterator is not valid,
 			if (nullptr == m_pList || nullptr == m_pNode || !m_isValid)
@@ -568,12 +567,23 @@ public:
 		// Destructor; No specific operation.
 		~const_reverse_iterator()
 		{ }
+
+		friend class list<T>;	// Allow access to private members by list.
 	};
 
 	// Default Constructor: Initialize members to their default values.
 	list();
 	// Destructor: Release all nodes, reinitialize members to their default values.
 	~list();
+
+	static bool isAuthentic()
+	{
+	#ifdef STList_20250420
+		return true;
+	#else
+		return false;
+	#endif
+	}
 };
 
 // Default Constructor: Initialize members to their default values.
@@ -683,6 +693,20 @@ typename list<T>::iterator list<T>::begin()
 	return iterator(this, this->m_HeadNode);
 }
 
+// begin const Function; Const version of begin() for range-based for loop.
+template<typename T>
+typename list<T>::const_iterator list<T>::begin() const
+{
+	// If the list is empty,
+	if (empty())
+	{
+		// Return iterator that points to nothing.
+		return const_iterator(nullptr, nullptr);
+	}
+	// If the list is not empty, return iterator that points to the first node.
+	return const_iterator(this, this->m_HeadNode);
+}
+
 // cbegin Function; Return constant iterator that points to the first data.
 template<typename T>
 typename list<T>::const_iterator list<T>::cbegin() const
@@ -697,6 +721,13 @@ typename list<T>::iterator list<T>::end()
 {
 	// Return iterator that points to nothing.
 	return iterator(this, nullptr);
+}
+
+// end const Function; Const version of end() for range-based for loop.
+template<typename T>
+typename list<T>::const_iterator list<T>::end() const
+{
+	return const_iterator(this, nullptr);
 }
 
 // cend Function; Return constant iterator that points to the right of the last data.
@@ -763,7 +794,10 @@ template<typename T>
 typename list<T>::iterator list<T>::insert(const T& data, const iterator& iter)
 {
 	// Check iterator.
-	iter.ValidityTest();
+	if (this != iter.m_pList)
+	{
+		throw std::runtime_error("Invalid iterator");
+	}
 
 	// Declare a node pointer to store the pointed node.
 	Node<T>* currNode;
@@ -795,7 +829,7 @@ typename list<T>::iterator list<T>::insert(const T& data, const iterator& iter)
 	}
 
 	// Declare a new node with the given data.
-	Node<T>* newNode = new Node(data, currNode, prevNode);
+	Node<T>* newNode = new Node<T>(data, currNode, prevNode);
 
 	// If the current node is pointing to nothing (end iterator),
 	if (!currNode)
@@ -862,7 +896,7 @@ typename list<T>::const_reverse_iterator list<T>::crend() const
 
 // empty Function; Check if the list has no node inside.
 template <typename T>
-inline bool list<T>::empty()
+inline bool list<T>::empty() const
 {
 	// If the list is empty, return true.
 	return (m_Count == 0);

@@ -59,8 +59,10 @@ public:
 	
 	// Iterator Functions
 	iterator begin();								// Return iterator that points to the first element
+	const_iterator begin() const;							// Constant version of begin function for range-based for loop
 	const_iterator cbegin() const;					// Return constant iterator that points to the first element
 	iterator end();									// Return iterator that points to the right of the last element
+	const_iterator end() const;							// Constant version of end function for range-based for loop
 	const_iterator cend() const;					// Return constatn iterator that points to the right of the last element
 	iterator erase(iterator& other);				// Erase the element pointed by other iterator and return the iterator pointing that position
 	iterator insert(iterator pos, const T& val);	// Insert the value to the pointed position and return iterator that points to that position
@@ -297,14 +299,14 @@ public:
 	class const_iterator
 	{
 	private:
-		const T* m_pData;			// Constant type data pointer
-		const vector* m_vectorPtr;	// Constant type vector pointer
-		int m_idx;					// Index variable (cannot be constant; need to point different elements)
-		bool m_isValid;				// Validity variable (cannot be constant; need to check validity)
+		const T*		m_pData;		// Constant type data pointer
+		const vector*	m_vectorPtr;	// Constant type vector pointer
+		int				m_idx;			// Index variable (cannot be constant; need to point different elements)
+		bool			m_isValid;		// Validity variable (cannot be constant; need to check validity)
 	public:
 		// Testing functions
 		// ValidityTest Function; Check if pointed vector or iterator itself is valid.
-		void ValidityTest()
+		void ValidityTest() const
 		{
 			// if array is invalid, or array and iterator does not match, or iterator is invalid,
 			if (nullptr == m_vectorPtr || m_pData != m_vectorPtr->m_pData || !m_isValid)
@@ -314,7 +316,7 @@ public:
 			}
 		}
 		// IndexTest Function; Check if index is not negative or out of bound; I designed this in addition to STL iterators.
-		void IndexTest()
+		void IndexTest() const
 		{
 			// if index is negative, or out of bound,
 			if (m_idx < 0 || m_idx > m_vectorPtr->m_Size)
@@ -1231,6 +1233,13 @@ typename vector<T>::iterator vector<T>::begin()
 	return iterator(this, m_pData, 0);
 }
 
+// begin const Function; Constant version of begin function for range-based for loop
+template<typename T>
+typename vector<T>::const_iterator vector<T>::begin() const
+{
+	return const_iterator(this, m_pData, 0);
+}
+
 // cbegin Function; constant version of begin Function.
 template<typename T>
 typename vector<T>::const_iterator vector<T>::cbegin() const
@@ -1244,6 +1253,13 @@ typename vector<T>::iterator vector<T>::end()
 {
 	// return next to the last element.
 	return iterator(this, m_pData, m_Size);
+}
+
+// end const Function; Constant version of end function for range-based for loop
+template<typename T>
+typename vector<T>::const_iterator vector<T>::end() const
+{
+	return const_iterator(this, m_pData, m_Size);
 }
 
 // cend Function; constant version of end Function.
