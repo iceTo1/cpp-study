@@ -1,7 +1,7 @@
 # log.md
 
 Author: Seungtack Lee
-Date: Apr 13, 2025
+Date: Apr 20, 2025
 
 ## Records while building the code
 
