@@ -11,7 +11,7 @@ Date: Apr 20, 2025
 
 - Using `while` loop for deleting all nodes is more safe. `for` loop with using `m_Count` has possibility that it does not match with the actual node count.
 
-- My `ValidityTest()` function is better when the return type is void, and when the function is `const`.
+- My `ValidityTest()` function is better when the return type is `void`, and when the function is `const`.
 
 - Presence of `cbegin`, `crbegin`, `cend`, `crend`.
 
