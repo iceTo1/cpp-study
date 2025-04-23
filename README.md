@@ -20,6 +20,7 @@ The goal of this repository is to reinforce my C++ skills beyond the classroom b
 ## What’s Inside
 
 - Custom `vector<T>` implementation
+- Custon `list<T>` implementation
 - Forward and reverse iterators
 - Leetcode problem solutions with description
 (More content will be added.)
