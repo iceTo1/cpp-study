@@ -63,7 +63,7 @@ private:
 	int			m_Count;	// Member variable to count nodes.
 private:
 	// Helper Functions (only available internally)
-	TNode<T>* InsertNode(const T& data, TNode<T>* node);
+	TNode<T>* InsertNode(const T& data, TNode<T>* subtree_root);
 	TNode<T>* EraseNode(TNode<T>* node, T data);
 	void PrintInOrder(TNode<T>* node) const;
 	TNode<T>* MinimumNode(TNode<T>* node);
@@ -138,31 +138,31 @@ public:
 
 // [Helper] InsertNode Function; Insert the node with given data to the correct in-order position.
 template<typename T>
-TNode<T>* BinarySearchTree<T>::InsertNode(const T& data, TNode<T>* node)
+TNode<T>* BinarySearchTree<T>::InsertNode(const T& data, TNode<T>* subtree_root)
 {
-	// Base case: If the position to insert is found,
-	if (nullptr == node)
+	// Base case: If the position to insert is found (result of comparison with leaf node),
+	if (nullptr == subtree_root)
 	{
 		// Set the node pointer to a new node with data and no child.
-		node = new TNode<T>(data, nullptr, nullptr);
+		subtree_root = new TNode<T>(data, nullptr, nullptr);
 	}
 	else
 	{
 		// If the data is bigger than the given node.
-		if (data > node->m_Data)
+		if (data > subtree_root->m_Data)
 		{
 			// Call the function recursively to find position to insert in the right side of the tree.
-			node->m_pRightNode = InsertNode(data, node->m_pRightNode);
+			subtree_root->m_pRightNode = InsertNode(data, subtree_root->m_pRightNode);
 		}
 		else
 		{
 			// Call the function recursively to find position to insert in the left side of the tree.
-			node->m_pLeftNode = InsertNode(data, node->m_pLeftNode);
+			subtree_root->m_pLeftNode = InsertNode(data, subtree_root->m_pLeftNode);
 		}
 	}
 
 	// Return the new node.
-	return node;
+	return subtree_root;
 }
 
 // [Helper] EraseNode Function; Erase the node that has the given data.
