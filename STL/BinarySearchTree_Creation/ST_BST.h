@@ -99,10 +99,6 @@ public:
 		iterator& operator++();
 		// Operator latter ++; Latter version of ++.
 		iterator operator++(int);
-		// Operator former --; Decrase the iterator in-orderly.
-		iterator& operator--();
-		// Operator latter --; Latter version of --.
-		iterator operator--(int);
 		// Operator =; Assign the given iterator to this iterator.
 		iterator& operator=(const iterator& other);
 		// Operator ==; Check if the two iterators are identical.
@@ -118,6 +114,7 @@ public:
 		// Destructor; No specific operation.
 		~iterator()
 		{ }
+
 		friend class BinarySearchTree<T>;	// Allow access to private member by Binary Search Tree class.
 	};
 
@@ -137,7 +134,6 @@ public:
 		// Reset the node count.
 		m_Count = 0;
 	}
-
 };
 
 // [Helper] InsertNode Function; Insert the node with given data to the correct in-order position.
