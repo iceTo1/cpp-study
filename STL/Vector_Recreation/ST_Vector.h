@@ -28,6 +28,7 @@ private:
 	
 public:
 	// Functions
+	void reserve(const int& size);	// Pre-allocate the given size of memory
 	void push_back(const T& data);	// Add element to the end
 	void pop_back();				// Remove the last element
 	void resize(int resize_count);	// Reallocate memory, increase capacity
@@ -1027,6 +1028,33 @@ vector<T>::~vector()
 	m_Capacity = 0;
 }
 
+template<typename T>
+void vector<T>::reserve(const int& size)
+{
+	// if resize_count is smaller than capacity,
+	if (size <= this->m_Capacity)
+	{
+		// do nothing.
+		return;
+	}
+
+	// Declare a temporary container with the resize count size.
+	T* pTemp = new T[size];
+
+	// Copy existing data to temporary container.
+	for (int i = 0; i < this->m_Size; ++i)
+	{
+		pTemp[i] = this->m_pData[i];
+	}
+
+	// Free the memory of the old container, reassign the pointer to the new container.
+	delete[] this->m_pData;
+	m_pData = pTemp;
+
+	// Adjust the capacity.
+	m_Capacity = size;
+}
+
 // push_back Funtion; add data to the end.
 template <typename T>
 void vector<T>::push_back(const T& data)
@@ -1067,32 +1095,29 @@ void vector<T>::pop_back()
 	--m_Size;
 }
 
-// resize Function; resize the capacity of the vector, maintain the elements.
+// resize Function; resize the capacity of the vector, initialize the remining data with default value.
 template <typename T>
-void vector<T>::resize(int resize_count)
+void vector<T>::resize(int newsize)
 {
-	// if resize_count is smaller than capacity,
-	if (resize_count <= this->m_Capacity)
+	// If the new size is bigger than capacity,
+	if (newsize > this->m_Capacity)
 	{
-		// do nothing.
-		return; 
+		// Reallocate the memory for new size.
+		reserve(newsize);
 	}
 
-	// Declare a temporary container with the resize count size.
-	T* pTemp = new T[resize_count];
-
-	// Copy existing data to temporary container.
-	for (int i = 0; i < this->m_Size; ++i)
+	// If the new size is bigger than the previous size,
+	if (newsize > m_Size)
 	{
-		pTemp[i] = this->m_pData[i];
+		// Set the remaining data as default value by type.
+		for (int i = m_Size; i < newsize; ++i)
+		{
+			m_pData[i] = T();
+		}
 	}
 
-	// Free the memory of the old container, reassign the pointer to the new container.
-	delete[] this->m_pData;
-	m_pData = pTemp;
-
-	// Adjust the capacity.
-	m_Capacity = resize_count;
+	// Adjust the size.
+	m_Size = newsize;	
 }
 
 // front Function; returns the first element. 

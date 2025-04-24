@@ -67,27 +67,44 @@ private:
 	int			m_Count;	// Member variable to count nodes.
 private:
 	// Helper Functions (only available internally)
+	// InsertNode Function; Insert the node with given data to the correct in-order position.
 	TNode<T>* InsertNode(const T& data, TNode<T>* subtree_root);
+	// EraseNode Function; Erase the node that has the given data.
 	TNode<T>* EraseNode(TNode<T>* node, T data);
+	// PrintInOrder Function; Print all data in-order.
 	void PrintInOrder(TNode<T>* node) const;
+	// MinimumNode Function; Return the minimum value in the tree.
 	TNode<T>* MinimumNode(TNode<T>* node);
+	// MaximumNode Function; Return the maximum value in the tree.
 	TNode<T>* MaximumNode(TNode<T>* node);
+	// ClearTree Function; Erase the all node from the tree.
 	void ClearTree(TNode<T>* node);
+	// SearchNode Function; Search the given data in the tree.
 	bool SearchNode(const T& target, TNode<T>* node);
 
 public:
 	// Public Functions
+	// insert Function; Insert the node with given data to the correct in-order position.
 	void insert(const T& data);
+	// erase Function; Erase the node that has the given data.
 	void erase(const T& data);
+	// clear Function; Erase all the nodes in the tree.
 	void clear();
+	// search Function; Search the given data in the tree.
 	bool search(const T& data);
+	// findMax Function; Return the right most child node's data.
 	const T& findMax() const;
+	// findMin Function; Return the left most child node's data.
 	const T& findMin() const;
+	// print Function; Print all data in-order.
 	void print() const;
 
-	// Iterator Functions
+	
 	class iterator; // Iterator declaration
+	// Iterator Functions
+	// begin Function; Return iterator that points to the first data.
 	iterator begin();
+	// end Function; Return iterator that points to the last data.
 	iterator end();
 
 public:
@@ -424,6 +441,7 @@ void BinarySearchTree<T>::ClearTree(TNode<T>* node)
 	delete node;
 }
 
+// [Helper] SearchNode Function; Search the given data in the tree.
 template<typename T>
 bool BinarySearchTree<T>::SearchNode(const T& target, TNode<T>* node)
 {
