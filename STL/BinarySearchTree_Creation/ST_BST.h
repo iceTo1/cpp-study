@@ -18,6 +18,9 @@
 /* This Binary Search Tree does not consider the duplicate value */
 /* All operations, sorting is based on in-order */
 
+#include <iostream>
+#include <stdexcept>
+
 // Declaration of Binary Search Tree class.
 template <typename T>
 class BinarySearchTree;
@@ -47,7 +50,8 @@ public:
 	~TreeNode()
 	{ }
 
-	friend class BinarySearchTree<T>; // Allow access to private member by Binary Search Tree class.
+	// Allow access to private member by Binary Search Tree class.
+	friend class BinarySearchTree<T>; 
 };
 
 // Nickname the TreeNode to TNode (for convenience).
@@ -67,7 +71,9 @@ private:
 	TNode<T>* EraseNode(TNode<T>* node, T data);
 	void PrintInOrder(TNode<T>* node) const;
 	TNode<T>* MinimumNode(TNode<T>* node);
+	TNode<T>* MaximumNode(TNode<T>* node);
 	void ClearTree(TNode<T>* node);
+	bool SearchNode(const T& target, TNode<T>* node);
 
 public:
 	// Public Functions
@@ -77,7 +83,7 @@ public:
 	bool search(const T& data);
 	const T& findMax() const;
 	const T& findMin() const;
-	void printInOrder() const;
+	void print() const;
 
 	// Iterator Functions
 	class iterator; // Iterator declaration
@@ -89,28 +95,146 @@ public:
 	class iterator
 	{
 	private:
-		TNode<T>*				m_pNode;	// Member variable to store the node address.
 		BinarySearchTree<T>*	m_pTree;	// Member variable to store the tree address.
+		TNode<T>*				m_pNode;	// Member variable to store the node address.
+		bool					m_isValid;	// Member variable to check if the iterator is valid.
 	public:
+		// ValidityTest Function; Test if the iterator is valid.
+		void ValidityTest()
+		{
+			// If the member variables are not valid,
+			if ((nullptr == m_pTree) && (nullptr == m_pNode) || !m_isValid)
+			{
+				// Throw an exception.
+				throw std::runtime_error("Iterator Invalid");
+			}
+		}
+
 		// Operator Overloading
 		// Operator *; Access the data through the iterator.
-		T& operator*();
+		T& operator*()
+		{
+			// Check the iterator.
+			ValidityTest();
+
+			// Return the data of the node.
+			return this->m_pNode->m_Data;
+		}
+
 		// Operator former ++; Advance the iterator in-orderly.
-		iterator& operator++();
+		iterator& operator++()
+		{
+			// Check the iterator.
+			ValidityTest();
+
+			// If there is a right subtree,
+			if (nullptr != m_pNode->m_pRightNode)
+			{
+				// Minimum node of the right subtree is the next node.
+				this->m_pNode = MinimumNode(m_pNode->m_pRightNode);
+			}
+			else
+			{
+				// Declare a node pointer to find the in-order successor node.
+				TNode<T>* successorNode = nullptr;
+				// Declare a node pointer to navigate through the node.
+				TNode<T>* currentNode = this->m_pTree->m_pRoot;
+
+				// <Finding in-order successor>
+				// Iterate while navigating node pointer is valid.
+				while (currentNode)
+				{
+					// If the current node's data is bigger than this node's data,
+					if (currentNode->m_Data > this->m_pNode->m_Data)
+					{
+						// Save the current node as successor node.
+						successorNode = currentNode;
+						// Continue traversing the current node.
+						currentNode = currentNode->m_pLeftNode;
+					}
+					// If the current node's data is smaller than this node's data,
+					else
+					{
+						currentNode = currentNode->m_pRightNode;
+					}
+				}
+				this->m_pNode = successorNode;
+			}
+
+			return *this;
+		}
+
 		// Operator latter ++; Latter version of ++.
-		iterator operator++(int);
+		iterator operator++(int)
+		{
+			// Declare an iterator to store current iterator.
+			iterator temp(this->m_pTree, this->m_pNode);
+			
+			// Advance this iterator.
+			++(*this);
+
+			// Return the saved iterator.
+			return temp;
+		}
+
 		// Operator =; Assign the given iterator to this iterator.
-		iterator& operator=(const iterator& other);
+		iterator& operator=(const iterator& other)
+		{
+			// Check the given iterator.
+			other.ValidityTest();
+
+			// Assign the member variables.
+			this->m_pTree = other.m_pTree;
+			this->m_pNode = other.m_pNode;
+			this->m_isValid = true;
+
+			return *this;
+		}
+
 		// Operator ==; Check if the two iterators are identical.
-		bool operator==(const iterator& other);
+		bool operator==(const iterator& other)
+		{
+			// Check both iterators.
+			ValidityTest();
+			other.ValidityTest();
+
+			// If both are pointing to the same,
+			if (this->m_pTree == other.m_pTree && this->m_pNode == other.m_pNode)
+			{
+				// Return true.
+				return true;
+			}
+			// Otherwise, return false.
+			return false;
+		}
+
 		// Operator !=; Check if the two iterators are not identical.
-		bool operator!=(const iterator& other);
+		bool operator!=(const iterator& other)
+		{
+			// Return the opposite of ==.
+			return !(*this == other);
+		}
+
 	public:
 		// Default Constructor; Initialize the iterator with default values.
 		iterator()
-			: m_pNode(nullptr)
-			, m_pTree(nullptr)
+			: m_pTree(nullptr)
+			, m_pNode(nullptr)
+			, m_isValid(false)
 		{ }
+		// Parameterized Constructor; Initialize the iterator with given values.
+		iterator(BinarySearchTree<T>* tree, TNode<T>* node)
+			: m_pTree(tree)
+			, m_pNode(node)
+			, m_isValid(false)
+		{
+			// If the iterator points to the correct item,
+			if (nullptr != m_pTree && nullptr != m_pNode)
+			{
+				// Update the iterator as valid.
+				m_isValid = true;
+			}
+		}
 		// Destructor; No specific operation.
 		~iterator()
 		{ }
@@ -172,6 +296,7 @@ TNode<T>* BinarySearchTree<T>::EraseNode(TNode<T>* node, T data)
 	// Base case: If there is no node with the given data,
 	if (nullptr == node)
 	{
+		// Escape from the recursion.
 		return nullptr;
 	}
 
@@ -226,6 +351,25 @@ TNode<T>* BinarySearchTree<T>::EraseNode(TNode<T>* node, T data)
 	return node;
 }
 
+// [Helper] PrintInOrder Function; Print all data in-order.
+template<typename T>
+void BinarySearchTree<T>::PrintInOrder(TNode<T>* node) const
+{
+	// Base case: If the node is empty,
+	if (nullptr == node)
+	{
+		// Escape from the recursion.
+		return;
+	}
+
+	// Print the left child node.
+	PrintInOrder(node->m_pLeftNode);
+	// Print the current node.
+	std::cout << node->m_Data;
+	// Print the right child node.
+	PrintInOrder(node->m_pRightNode);
+}
+
 // [Helper] MinimumNode Function; Return the minimum value in the tree.
 template<typename T>
 TNode<T>* BinarySearchTree<T>::MinimumNode(TNode<T>* node)
@@ -238,8 +382,24 @@ TNode<T>* BinarySearchTree<T>::MinimumNode(TNode<T>* node)
 		// Update the minimum node to its left child node.
 		min = min->m_pLeftNode;
 	}
-	// Return the most left child node.
+	// Return the left most child node.
 	return min;
+}
+
+// [Helper] MaximumNode Function; Return the maximum value in the tree.
+template<typename T>
+TNode<T>* BinarySearchTree<T>::MaximumNode(TNode<T>* node)
+{
+	// Store the value of the given node.
+	TNode<T>* max = node;
+	// Iterate while there is right child node.
+	while (max->m_pRightNode)
+	{
+		// Update the maximum node to its right child node.
+		max = max->m_pRightNode;
+	}
+	// Return the right most child node.
+	return max;
 }
 
 // [Helper] ClearTree Function; Erase the all node from the tree.
@@ -262,6 +422,40 @@ void BinarySearchTree<T>::ClearTree(TNode<T>* node)
 
 	// Delete the node.
 	delete node;
+}
+
+template<typename T>
+bool BinarySearchTree<T>::SearchNode(const T& target, TNode<T>* node)
+{
+	// If the data was not found,
+	if (nullptr == node)
+	{
+		// Return false.
+		return false;
+	}
+
+	// If the target is bigger than the node's data,
+	if (target > node->m_Data)
+	{
+		// Recursively call the function with right child node.
+		return SearchNode(target, node->m_pRightNode);
+	}
+	// If the target is smaller than the node's data,
+	else if (target < node->m_Data)
+	{
+		// Recursively call the function with left child node.
+		return SearchNode(target, node->m_pLeftNode);
+
+	}
+	// If the target is found,
+	else if (target == node->m_Data)
+	{
+		// Return true.
+		return true;
+	}
+
+	// If not found, return false.
+	return false;
 }
 
 // insert Function; Insert the node with given data to the correct in-order position.
@@ -305,3 +499,50 @@ void BinarySearchTree<T>::clear()
 	m_Count = 0;
 }
 
+// search Function; Search the given data in the tree.
+template<typename T>
+inline bool BinarySearchTree<T>::search(const T& target)
+{
+	// Prompt the recursive call from the root node, with the data.
+	return SearchNode(target, this->m_pRoot);
+}
+
+// findMax Function; Return the right most child node's data.
+template<typename T>
+inline const T& BinarySearchTree<T>::findMax() const
+{
+	// Return the maximum node's data.
+	return (MaximumNode(this->m_pRoot))->m_Data;
+}
+
+// findMin Function; Return the left most child node's data.
+template<typename T>
+inline const T& BinarySearchTree<T>::findMin() const
+{
+	// Return the minimum node's data.
+	return (MinimumNode(this->m_pRoot))->m_Data;
+}
+
+// print Function; Print all data in-order.
+template<typename T>
+inline void BinarySearchTree<T>::print() const
+{
+	// Prompt the recursive call from the root node, with the data.
+	PrintInOrder(this->m_pRoot);
+}
+
+// begin Function; Return iterator that points to the first data.
+template<typename T>
+typename BinarySearchTree<T>::iterator BinarySearchTree<T>::begin()
+{
+	// Return iterator with the minimum node.
+	return iterator(this, MinimumNode(this->m_pRoot));
+}
+
+// end Function; Return iterator that points to the last data.
+template<typename T>
+typename BinarySearchTree<T>::iterator BinarySearchTree<T>::end()
+{
+	// Return iterator with the next to the maximum node.
+	return iterator(this, nullptr);
+}
