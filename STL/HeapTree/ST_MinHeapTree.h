@@ -52,7 +52,7 @@ public:
 	// DebugPrint Function; Print the data.
 	void DebugPrint();
 public:
-	// Parameterized Constructor; Initialize the HeapTree with given values.
+	// Parameterized Constructor; Initialize the HeapTree with given value.
 	MinHeap(int capacity)
 		: m_MinVec()
 	{
@@ -150,10 +150,10 @@ template<typename T>
 T& MinHeap<T>::top()
 {
 	// If the heaptree is empty,
-	if (0 == m_MinVec.size())
+	if (m_MinVec.empty())
 	{
 		// Throw an exception.
-		throw std::underflow_error("HeapTree is empty");
+		throw std::underflow_error("The HeapTree is empty");
 	}
 	// Return the first value.
 	return m_MinVec[0];
