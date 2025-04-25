@@ -16,6 +16,7 @@
 */
 
 #include "../Vector_Recreation/ST_Vector.h"
+#include "../include/utility.h"
 #include <stdexcept>
 #include <iostream>
 
@@ -105,9 +106,7 @@ void MaxHeap<T>::siftDown(int index)
 		}
 
 		// Swap the bigger value from children with the data with given index.
-		T temp = m_MaxVec[index];
-		m_MaxVec[index] = m_MaxVec[maxIndex];
-		m_MaxVec[maxIndex] = temp;
+		ST::swap(m_MaxVec[index], m_MaxVec[maxIndex]);
 
 		// Update the index to found maximum value index.
 		index = maxIndex;
@@ -131,9 +130,8 @@ void MaxHeap<T>::siftUp(int index)
 		if (m_MaxVec[index] > m_MaxVec[parentIndex])
 		{
 			// Swap the value
-			T temp = m_MaxVec[index];
-			m_MaxVec[index] = m_MaxVec[parentIndex];
-			m_MaxVec[parentIndex] = temp;
+			ST::swap(m_MaxVec[index], m_MaxVec[parentIndex]);
+
 			// Update the index to the parent's index.
 			index = parentIndex;
 		}

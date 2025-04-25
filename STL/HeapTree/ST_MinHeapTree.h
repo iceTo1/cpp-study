@@ -16,6 +16,7 @@
 */
 
 #include "../Vector_Recreation/ST_Vector.h"
+#include "../include/utility.h"
 #include <stdexcept>
 #include <iostream>
 
@@ -112,9 +113,7 @@ void MinHeap<T>::siftDown(int index)
 		}
 
 		// Swap the heapifying value with the smaller child.
-		T temp = m_MinVec[smallerIdx];
-		m_MinVec[smallerIdx] = m_MinVec[index];
-		m_MinVec[index] = temp;
+		ST::swap(m_MinVec[smallerIdx], m_MinVec[index]);
 
 		index = smallerIdx;
 	}
@@ -136,9 +135,7 @@ void MinHeap<T>::siftUp(int index)
 		tempIdx = parent(index);
 
 		// Swap the heapifying value and its parnet.
-		temp = m_MinVec[index];
-		m_MinVec[index] = m_MinVec[tempIdx];
-		m_MinVec[tempIdx] = temp;
+		ST::swap(m_MinVec[index], m_MinVec[tempIdx]);
 
 		// Update the heapifying value's index.
 		index = tempIdx;
