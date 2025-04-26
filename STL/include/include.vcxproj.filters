@@ -13,5 +13,22 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{b419722f-3f1e-41a4-b06c-625f55758275}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="swap.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="move.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="remove_reference.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility.h">
+      <Filter>utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
