@@ -61,6 +61,7 @@ priority_queue<T, Compare>::priority_queue(std::initializer_list<T> init)
 template<typename T, typename Compare>
 void priority_queue<T, Compare>::push(const T& data)
 {
+	// Call the container's push function.
 	m_Heap.push(data);
 }
 
@@ -68,13 +69,14 @@ void priority_queue<T, Compare>::push(const T& data)
 template<typename T, typename Compare>
 void priority_queue<T, Compare>::pop()
 {
+	// Call the container's pop function.
 	m_Heap.pop();
-	// m_Heap.heapify();
 }
 
 template<typename T, typename Compare>
 T& priority_queue<T, Compare>::top()
 {
+	// Call the container's top function.
 	return m_Heap.top();
 }
 
@@ -82,6 +84,7 @@ T& priority_queue<T, Compare>::top()
 template<typename T, typename Compare>
 bool priority_queue<T, Compare>::empty() const
 {
+	// Call the container's empty function.
 	return m_Heap.empty();
 }
 
@@ -89,6 +92,7 @@ bool priority_queue<T, Compare>::empty() const
 template<typename T, typename Compare>
 int priority_queue<T, Compare>::size()
 {
+	// Call the container's size function.
 	return m_Heap.size();
 }
 
@@ -96,6 +100,7 @@ int priority_queue<T, Compare>::size()
 template<typename T, typename Compare>
 void priority_queue<T, Compare>::DebugPrint()
 {
+	// Call the container's DataPrint function.
 	std::cout << "[ ";
 	m_Heap.DataPrint();
 	std::cout << "]\n";
