@@ -21,5 +21,13 @@
     <ClInclude Include="ST_MaxHeapTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ST_Heap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Heap_Main Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

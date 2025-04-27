@@ -127,8 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ST_Heap.h" />
     <ClInclude Include="ST_MaxHeapTree.h" />
     <ClInclude Include="ST_MinHeapTree.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Heap_Main Test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
