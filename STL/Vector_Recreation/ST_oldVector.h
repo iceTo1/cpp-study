@@ -9,7 +9,7 @@
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.
 * Please leave a star when you are cloning this code.
-* 
+*
 * Unauthorized use in academic or professional submissions without proper credit is prohibited.
 * If you received this code from a source other than my GitHub repository, please let me know:
 * https://github.com/remydzn
@@ -22,10 +22,10 @@ template <typename T>
 class vector
 {
 private:
-	T*	m_pData;	// Use pointer for Dynamic Memory Allocation (HEAP)
+	T* m_pData;		// Use pointer for Dynamic Memory Allocation (HEAP)
 	int m_Size;		// Element count
 	int m_Capacity; // Max element count
-	
+
 public:
 	// Functions
 	void reserve(const int& size);	// Pre-allocate the given size of memory
@@ -55,7 +55,7 @@ public:
 	class const_iterator;			// Constant Iterator class declaration
 	class reverse_iterator;			// Reverse Iterator class declaration
 	class const_reverse_iterator;	// Constant Reverse Iterator class declaration
-	
+
 	// Iterator Functions
 	iterator begin();								// Return iterator that points to the first element
 	const_iterator begin() const;							// Constant version of begin function for range-based for loop
@@ -71,7 +71,7 @@ public:
 	const_reverse_iterator crbegin();	// Return constant iterator that goes backward, pointing to the last element
 	reverse_iterator rend();			// Return iterator that goes backward, pointing to the left of the first element
 	const_reverse_iterator crend();		// Return constant iterator that goes backward, pointing to the last element
-	
+
 public:
 	vector();									// Default Constructor
 	vector(int size, const T& initial_value);	// Initialize with size and value
@@ -83,11 +83,11 @@ public:
 	class iterator
 	{
 	private:
-		vector*	m_vectorPtr;	// Pointer to point vector
-		T*		m_pData;		// Pointed value
+		vector* m_vectorPtr;	// Pointer to point vector
+		T* m_pData;		// Pointed value
 		int		m_idx;			// Use -1 for end iterator
 		bool	m_isValid;		// Check if the iterator is valid (not modified)
-	
+
 	public:
 		// Testing functions
 		// ValidityTest Function; Check if pointed vector or iterator itself is valid.
@@ -110,7 +110,7 @@ public:
 				throw std::out_of_range("Index out of bound");
 			}
 		}
-		
+
 		// Operator overload
 		// Operator *; Access the value like pointer.
 		T& operator* ()
@@ -252,14 +252,14 @@ public:
 		}
 
 		// Operator ==; Check if two iterators are identical.
-		bool operator== (const iterator& other) 
+		bool operator== (const iterator& other)
 		{
 			// if iterator is pointing to same vector and, same element, return true.
 			return (this->m_vectorPtr == other.m_vectorPtr && this->m_idx == other.m_idx);
 		}
 
 		// Operator !=; Check if two iterators are unidentical.
-		bool operator!= (const iterator& other) 
+		bool operator!= (const iterator& other)
 		{
 			// return opposite result of operator ==.
 			return !(*this == other);
@@ -272,7 +272,8 @@ public:
 			, m_pData(nullptr)
 			, m_idx(0)
 			, m_isValid(false)
-		{ }
+		{
+		}
 
 		// iterator parameterized Constructor; Initialized the members by given values.
 		iterator(vector<T>* vector, T* data, int idx)
@@ -290,17 +291,18 @@ public:
 
 		// iterator Destructor; No particular operation needed without memory allocation.
 		~iterator()
-		{ }
+		{
+		}
 
 		// Declare friend to access private members of vector.
-		friend class vector; 
+		friend class vector;
 	};
 
 	class const_iterator
 	{
 	private:
-		const T*		m_pData;		// Constant type data pointer
-		const vector*	m_vectorPtr;	// Constant type vector pointer
+		const T* m_pData;		// Constant type data pointer
+		const vector* m_vectorPtr;	// Constant type vector pointer
 		int				m_idx;			// Index variable (cannot be constant; need to point different elements)
 		bool			m_isValid;		// Validity variable (cannot be constant; need to check validity)
 	public:
@@ -495,14 +497,15 @@ public:
 		}
 		// constant iterator Destructor; No specific operation due to no memory allocation.
 		~const_iterator()
-		{ }
+		{
+		}
 	};
 
 	class reverse_iterator
 	{
 	private:
 		vector* m_vectorPtr;
-		T*		m_pData;
+		T* m_pData;
 		int		m_idx;
 		bool	m_isValid;
 	public:
@@ -698,7 +701,8 @@ public:
 			, m_pData(nullptr)
 			, m_idx(0)
 			, m_isValid(false)
-		{ }
+		{
+		}
 
 		// reverse_iterator parameterized Constructor; Initialized the members by given values.
 		reverse_iterator(vector<T>* vector, T* data, int idx)
@@ -716,7 +720,8 @@ public:
 
 		// reverse_iterator Destructor; No particular operation needed without memory allocation.
 		~reverse_iterator()
-		{ }
+		{
+		}
 
 		// Declare friend to access private members of vector.
 		friend class vector;
@@ -725,8 +730,8 @@ public:
 	class const_reverse_iterator
 	{
 	private:
-		const vector*	m_vectorPtr;
-		const T*		m_pData;
+		const vector* m_vectorPtr;
+		const T* m_pData;
 		int				m_idx;
 		bool			m_isValid;
 	public:
@@ -932,7 +937,8 @@ public:
 
 		// reverse_iterator Destructor; No particular operation needed without memory allocation.
 		~const_reverse_iterator()
-		{ }
+		{
+		}
 
 		// Declare friend to access private members of vector.
 		friend class vector;
@@ -940,11 +946,11 @@ public:
 
 	static bool isAuthentic()
 	{
-	#ifdef STVec_20250420
+#ifdef STVec_20250420
 		return true;
-	#else
+#else
 		return false;
-	#endif
+#endif
 	}
 };
 
@@ -985,7 +991,8 @@ vector<T>::vector(int size, const T& initial_value)
 template <typename T>
 vector<T>::vector(int size)
 	: vector(size, T())
-{ }
+{
+}
 
 // List initializing Constructor; Initialize with list
 template<typename T>
@@ -1000,7 +1007,7 @@ vector<T>::vector(std::initializer_list<T> init)
 
 // Copy Constructor; initialize with same values of other.
 template <typename T>
-vector<T>::vector(const vector & other)
+vector<T>::vector(const vector& other)
 	: m_pData(nullptr)
 	, m_Size(other.m_Size)
 	, m_Capacity(other.m_Capacity)
@@ -1020,9 +1027,9 @@ template <typename T>
 vector<T>::~vector()
 {
 	// Free allocated memories.
-	delete[] m_pData; 
+	delete[] m_pData;
 	// Prevent dangling pointer.
-	m_pData = nullptr; 
+	m_pData = nullptr;
 
 	m_Size = 0;
 	m_Capacity = 0;
@@ -1063,14 +1070,14 @@ void vector<T>::push_back(const T& data)
 	if (0 == this->m_Capacity)
 	{
 		// re-allocate the capacity to 1.
-		resize(1);
+		reserve(1);
 	}
 
 	// if capacity is not enough,
 	else if (m_Size >= m_Capacity)
 	{
 		// re-allocate the capacity to double.
-		resize(m_Capacity * 2);
+		reserve(m_Capacity * 2);
 	}
 
 	// Add data.
@@ -1117,7 +1124,7 @@ void vector<T>::resize(int newsize)
 	}
 
 	// Adjust the size.
-	m_Size = newsize;	
+	m_Size = newsize;
 }
 
 // front Function; returns the first element. 
@@ -1322,7 +1329,7 @@ typename vector<T>::iterator vector<T>::erase(iterator& other)
 	--m_Size;
 	// Re-initialize the last element to the default value by its type (optional).
 	m_pData[m_Size] = T();
-	
+
 	return iterator(this, m_pData, other.m_idx);
 }
 
@@ -1373,7 +1380,7 @@ template<typename T>
 typename vector<T>::const_reverse_iterator vector<T>::crbegin()
 {
 	// Return the const_iterator that points to the last element.
-	return const_reverse_iterator(this, m_pData, (m_Size==0) ? -1 : m_Size - 1);
+	return const_reverse_iterator(this, m_pData, (m_Size == 0) ? -1 : m_Size - 1);
 }
 
 // rend Function; return reverse iterator that points to the next to the first element.

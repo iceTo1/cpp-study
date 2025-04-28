@@ -13,34 +13,87 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="utility">
+    <Filter Include="Header Files\utility">
       <UniqueIdentifier>{b419722f-3f1e-41a4-b06c-625f55758275}</UniqueIdentifier>
     </Filter>
-    <Filter Include="functional">
-      <UniqueIdentifier>{941ed07d-cd7b-4444-b24d-242e64631c3d}</UniqueIdentifier>
+    <Filter Include="Header Files\functional">
+      <UniqueIdentifier>{39ef7064-991f-437a-a609-fe516f157dfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\iterator">
+      <UniqueIdentifier>{4727e2de-e064-407b-9e43-68622fe06f7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\algorithm">
+      <UniqueIdentifier>{1b60cf04-4f8b-4b40-9668-f4e3d1cabb4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\vector">
+      <UniqueIdentifier>{c0bf31a6-ed2a-479a-893f-f08c4ab677a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\list">
+      <UniqueIdentifier>{cab297ca-441b-46ba-a3f6-6767931878ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="swap.h">
-      <Filter>utility</Filter>
+    <ClInclude Include="algorithm\sort.h">
+      <Filter>Header Files\algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="move.h">
-      <Filter>utility</Filter>
+    <ClInclude Include="functional\functional.h">
+      <Filter>Header Files\functional</Filter>
     </ClInclude>
-    <ClInclude Include="remove_reference.h">
-      <Filter>utility</Filter>
+    <ClInclude Include="functional\greater.h">
+      <Filter>Header Files\functional</Filter>
     </ClInclude>
-    <ClInclude Include="utility.h">
-      <Filter>utility</Filter>
+    <ClInclude Include="functional\less.h">
+      <Filter>Header Files\functional</Filter>
     </ClInclude>
-    <ClInclude Include="less.h">
-      <Filter>functional</Filter>
+    <ClInclude Include="iterator\distance.h">
+      <Filter>Header Files\iterator</Filter>
     </ClInclude>
-    <ClInclude Include="functional.h">
-      <Filter>functional</Filter>
+    <ClInclude Include="iterator\iterator.h">
+      <Filter>Header Files\iterator</Filter>
     </ClInclude>
-    <ClInclude Include="greater.h">
-      <Filter>functional</Filter>
+    <ClInclude Include="iterator\iterator_category.h">
+      <Filter>Header Files\iterator</Filter>
     </ClInclude>
+    <ClInclude Include="iterator\iterator_traits.h">
+      <Filter>Header Files\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\move.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\remove_reference.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\swap.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\utility.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="list\ST_List.h">
+      <Filter>Header Files\list</Filter>
+    </ClInclude>
+    <ClInclude Include="vector\ST_Vector.h">
+      <Filter>Header Files\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="vector\vector_iterators.h">
+      <Filter>Header Files\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="vector\vector_const_iterator.h">
+      <Filter>Header Files\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="vector\vector_const_reverse_iterator.h">
+      <Filter>Header Files\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="vector\vector_iterator.h">
+      <Filter>Header Files\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="vector\vector_reverse_iterator.h">
+      <Filter>Header Files\vector</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="vector\STVector_Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

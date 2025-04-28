@@ -18,6 +18,30 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="algorithm\sort.h" />
+    <ClInclude Include="functional\functional.h" />
+    <ClInclude Include="functional\greater.h" />
+    <ClInclude Include="functional\less.h" />
+    <ClInclude Include="iterator\distance.h" />
+    <ClInclude Include="iterator\iterator.h" />
+    <ClInclude Include="iterator\iterator_category.h" />
+    <ClInclude Include="iterator\iterator_traits.h" />
+    <ClInclude Include="list\ST_List.h" />
+    <ClInclude Include="utility\move.h" />
+    <ClInclude Include="utility\remove_reference.h" />
+    <ClInclude Include="utility\swap.h" />
+    <ClInclude Include="utility\utility.h" />
+    <ClInclude Include="vector\ST_Vector.h" />
+    <ClInclude Include="vector\vector_const_iterator.h" />
+    <ClInclude Include="vector\vector_const_reverse_iterator.h" />
+    <ClInclude Include="vector\vector_iterator.h" />
+    <ClInclude Include="vector\vector_iterators.h" />
+    <ClInclude Include="vector\vector_reverse_iterator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="vector\STVector_Test.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -126,15 +150,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="functional.h" />
-    <ClInclude Include="greater.h" />
-    <ClInclude Include="less.h" />
-    <ClInclude Include="move.h" />
-    <ClInclude Include="remove_reference.h" />
-    <ClInclude Include="swap.h" />
-    <ClInclude Include="utility.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

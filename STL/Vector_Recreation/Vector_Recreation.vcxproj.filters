@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ST_Vector.h">
+    <ClInclude Include="ST_oldVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Vector_Main Test.cpp">
+    <ClCompile Include="OLD_Vector_Main Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
