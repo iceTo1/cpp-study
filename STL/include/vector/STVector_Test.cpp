@@ -20,6 +20,7 @@
 */
 
 #include "ST_Vector.h"
+#include "../algorithm/sort.h"
 #include <iostream>
 
 void Vector_Test();
@@ -45,7 +46,7 @@ void PrintVector(const ST::vector<T>& vec)
 void Vector_Test()
 {
 	int option;
-	ST::vector<int> test = { 1, 2, 3, 4, 5 };
+	ST::vector<int> test = { 1, 6, 3, 4, 2, 7 };
 
 	while (true)
 	{
@@ -53,7 +54,7 @@ void Vector_Test()
 		std::cout << "\n\n\t\t\t\t\t***** Vector Recreation Test *****\n\n";
 		std::cout << "Current vector:\n";
 		PrintVector(test);
-		std::cout << "1. push_back    2. pop_back    3. front    4. back    5. at    6. print    0. exit\n";
+		std::cout << "1. push_back    2. pop_back    3. front    4. back    5. at    6. sort    7. print    0. exit\n";
 		std::cout << "Choose: ";
 		std::cin >> option;
 
@@ -83,6 +84,11 @@ void Vector_Test()
 			std::cout << test.at(idx) << "\n";
 			break;
 		case 6:
+			std::cout << "Sorted Vector: ";
+			ST::sort(test.begin(), test.end());
+			PrintVector(test);
+			break;
+		case 7:
 			std::cout << "Vector: ";
 			PrintVector(test);
 			break;

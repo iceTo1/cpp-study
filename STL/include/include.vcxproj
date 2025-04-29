@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="algorithm\heap_sort.h" />
+    <ClInclude Include="algorithm\insertion_sort.h" />
+    <ClInclude Include="algorithm\intro_sort.h" />
+    <ClInclude Include="algorithm\quick_sort.h" />
     <ClInclude Include="algorithm\sort.h" />
     <ClInclude Include="functional\functional.h" />
     <ClInclude Include="functional\greater.h" />
@@ -27,11 +31,14 @@
     <ClInclude Include="iterator\iterator.h" />
     <ClInclude Include="iterator\iterator_category.h" />
     <ClInclude Include="iterator\iterator_traits.h" />
+    <ClInclude Include="iterator\next.h" />
+    <ClInclude Include="iterator\prev.h" />
     <ClInclude Include="list\ST_List.h" />
     <ClInclude Include="utility\move.h" />
     <ClInclude Include="utility\remove_reference.h" />
     <ClInclude Include="utility\swap.h" />
     <ClInclude Include="utility\utility.h" />
+    <ClInclude Include="vector\advance.h" />
     <ClInclude Include="vector\ST_Vector.h" />
     <ClInclude Include="vector\vector_const_iterator.h" />
     <ClInclude Include="vector\vector_const_reverse_iterator.h" />

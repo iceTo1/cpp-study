@@ -15,18 +15,37 @@
 * https://github.com/remydzn
 */
 
+#include <cmath>
 #include "../utility/utility.h"
 #include "../functional/functional.h"
 #include "../iterator/iterator.h"
+#include "../algorithm/intro_sort.h"
+#include <iostream>
 
 namespace ST
 {
-	template <typename RandomIter, typename Compare = ST::less<typename ST::iterator_traits<RandomIter>::value_type>> 
-	void sort(RandomIter begin, RandomIter end, Compare comp)
+	template <typename SizeType>
+	SizeType floor_log2(SizeType n)
 	{
-		// If the container is small, perform Insertion Sort.
+		SizeType result = 0;
 		
+		while (n >>= 1)
+		{
+			++result;
+		}
+		
+		return result;
+	}
 
-		// If the container is large, perform Intro Sort (Quick Sort + Heap Sort).
+	template <typename RandomIter, typename Compare = ST::less<typename ST::iterator_traits<RandomIter>::value_type>> 
+	void sort(RandomIter begin, RandomIter end, Compare comp = Compare())
+	{
+		using DiffType = typename ST::iterator_traits<RandomIter>::difference_type;
+		std::cout << "test";
+
+		DiffType size = ST::distance(begin, end);
+		int maxDepth = 2 * ST::floor_log2(size);
+
+		ST::intro_sort(begin, end, comp, maxDepth);
 	}
 }

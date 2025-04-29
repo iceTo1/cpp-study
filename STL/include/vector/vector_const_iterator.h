@@ -160,11 +160,13 @@ namespace ST
 				throw std::out_of_range("Index out of bound");
 			}
 
+			vector_const_iterator temp = *this;
+
 			// Increase index by "step".
-			m_idx += step;
+			temp.m_idx += step;
 
 			// Return modified iterator.
-			return *this;
+			return temp;
 		}
 
 		// Operator -; Decrease the iterator by given step.
@@ -181,11 +183,13 @@ namespace ST
 				throw std::out_of_range("Index out of bound");
 			}
 
+			vector_const_iterator temp = *this;
+
 			// Decrease index by "step".
-			m_idx -= step;
+			temp.m_idx -= step;
 
 			// Return modified iterator.
-			return *this;
+			return temp;
 		}
 
 		// Operator =; Assign/copy iterator.
@@ -216,6 +220,19 @@ namespace ST
 			// return opposite result of operator ==.
 			return !(*this == other);
 		}
+
+		// Operator +; Calculate index between iterators.
+		int operator+ (const vector_const_iterator& other) const
+		{
+			return this->m_idx + other.m_idx;
+		}
+
+		// Operator -; Calculate index between iterators.
+		int operator- (const vector_const_iterator& other) const
+		{
+			return this->m_idx - other.m_idx;
+		}
+
 	public:
 		// iterator parameterized Constructor; Initialized the members by given values.
 		vector_const_iterator(const vector<T>* vector, const T* data, int idx)

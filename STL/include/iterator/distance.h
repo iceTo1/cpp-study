@@ -1,6 +1,8 @@
 #pragma once
 
-#include "iterator_traits.h"
+#include "../iterator/iterator_traits.h"
+#include "../iterator/iterator.h"
+
 
 namespace ST
 {
@@ -27,7 +29,7 @@ namespace ST
 	}
 
 	template <typename Iterator>
-	typename iterator_traits<Iterator>::difference_type
+	typename ST::iterator_traits<Iterator>::difference_type
 	distance(Iterator begin, Iterator end)
 	{
 		using category = typename iterator_traits<Iterator>::iterator_category;

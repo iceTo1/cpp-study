@@ -15,9 +15,9 @@
 * https://github.com/remydzn
 */
 
-#include "../Vector_Recreation/ST_Vector.h"
-#include "../include/utility.h"
-#include "../include/functional.h"
+#include "../Vector_Recreation/ST_oldVector.h"
+#include "../include/utility/utility.h"
+#include "../include/functional/functional.h"
 #include <stdexcept>
 #include <iostream>
 

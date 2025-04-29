@@ -90,6 +90,27 @@
     <ClInclude Include="vector\vector_reverse_iterator.h">
       <Filter>Header Files\vector</Filter>
     </ClInclude>
+    <ClInclude Include="vector\advance.h">
+      <Filter>Header Files\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="iterator\next.h">
+      <Filter>Header Files\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="iterator\prev.h">
+      <Filter>Header Files\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="algorithm\insertion_sort.h">
+      <Filter>Header Files\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="algorithm\quick_sort.h">
+      <Filter>Header Files\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="algorithm\heap_sort.h">
+      <Filter>Header Files\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="algorithm\intro_sort.h">
+      <Filter>Header Files\algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vector\STVector_Test.cpp">

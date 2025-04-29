@@ -43,7 +43,7 @@ namespace ST
 	public:
 		// Testing functions
 		// ValidityTest Function; Check if pointed vector or iterator itself is valid.
-		void ValidityTest()
+		void ValidityTest() const
 		{
 			// if array is invalid, or array and iterator does not match, or iterator is invalid,
 			if (nullptr == m_vectorPtr || nullptr == m_pData || m_pData != m_vectorPtr->m_pData || !m_isValid)
@@ -53,7 +53,7 @@ namespace ST
 			}
 		}
 		// IndexTest Function; Check if index is not negative or out of bound; I designed this in addition to STL iterators.
-		void IndexTest()
+		void IndexTest() const
 		{
 			// if index is negative, or out of bound,
 			if (m_idx < 0 || m_idx > m_vectorPtr->m_Size)
@@ -147,7 +147,7 @@ namespace ST
 		}
 
 		// Operator +; Increase the iterator by given step.
-		vector_iterator& operator+ (int step)
+		vector_iterator& operator+ (int step) const
 		{
 			// Test iterator.
 			ValidityTest();
@@ -160,15 +160,16 @@ namespace ST
 				throw std::out_of_range("Index out of bound");
 			}
 
+			vector_iterator temp = *this;
 			// Increase index by "step".
-			m_idx += step;
+			temp.m_idx += step;
 
 			// Return modified iterator.
-			return *this;
+			return temp;
 		}
 
 		// Operator -; Decrease the iterator by given step.
-		vector_iterator& operator- (int step)
+		vector_iterator& operator- (int step) const
 		{
 			// Test iterator.
 			ValidityTest();
@@ -181,11 +182,13 @@ namespace ST
 				throw std::out_of_range("Index out of bound");
 			}
 
+			vector_iterator temp = *this;
+
 			// Decrease index by "step".
-			m_idx -= step;
+			temp.m_idx -= step;
 
 			// Return modified iterator.
-			return *this;
+			return temp;
 		}
 
 		// Operator =; Assign/copy iterator.
@@ -215,6 +218,31 @@ namespace ST
 		{
 			// return opposite result of operator ==.
 			return !(*this == other);
+		}
+
+		// Operator +; Calculate index between iterators.
+		std::ptrdiff_t operator+ (const vector_iterator& other) const
+		{
+			return this->m_idx + other.m_idx;
+		}
+
+		// Operator -; Calculate index between iterators.
+		std::ptrdiff_t operator- (const vector_iterator& other) const
+		{
+			return this->m_idx - other.m_idx;
+		}
+
+		// Operator >=; Calculate index with bit operator.
+		bool operator>=(const vector_iterator& other) const
+		{
+			return this->m_idx >= other.m_idx;
+		}
+
+		// Operator[]; Bit operating [].
+		T& operator[](int offset) const
+		{
+			ValidityTest();
+			return m_pData[m_idx + offset];
 		}
 
 	public:
