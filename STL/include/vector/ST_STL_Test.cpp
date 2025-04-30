@@ -33,7 +33,7 @@ int main()
 	{
 		system("cls");
 		std::cout << "\n\n\t\t\t\t\tST's STL Recreation Project\n\n";
-		std::cout << "Which Container would you like to test?\n(1: Vector, 2: List)\n";
+		std::cout << "Which Container would you like to test?\n(1: Vector, 2: List, 0: Exit)\n";
 		std::cout << "[";
 		std::cout << " ]\b\b";
 		int op;
@@ -47,8 +47,10 @@ int main()
 		case 2:
 			List_Test();
 			break;
+		case 0:
+			return;
 		default:
-			std::cout << "Choose valid option (1 or 2)";
+			std::cout << "Choose valid option (0 to 2)";
 		}
 	}
 	
@@ -158,7 +160,7 @@ void List_Test()
 		std::cout << "\n\n\t\t\t\t***** List Recreation Test *****\n\n";
 		std::cout << "Current list:\n";
 		PrintList(test);
-		std::cout << "1. push_back    2. push_front    3.pop_back    4. pop_front    5. back    6. front    7. print    8. insert    9. sort    0. exit\n";
+		std::cout << "1. push_back    2. push_front    3.pop_back    4. pop_front    5. back    6. front    7. print\n8. insert    9. sort    0. exit\n";
 		std::cout << "Choose: ";
 		std::cin >> option;
 
