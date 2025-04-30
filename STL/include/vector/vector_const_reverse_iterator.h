@@ -4,7 +4,7 @@
 * Custom const reverse iterator for vector implementation by Seungtack Lee
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
-* Date: Apr 28 , 2025
+* Date: Apr 28~30, 2025
 *
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.
