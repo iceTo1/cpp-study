@@ -39,13 +39,15 @@ namespace ST
 
 			if (left >= right)
 			{
-				return right;
+				break;
 			}
 
 			ST::swap(*left, *right);
 			++left;
 			--right;
 		}
+
+		return right;
 	}
 
 	template <typename RandomIter, typename Compare>

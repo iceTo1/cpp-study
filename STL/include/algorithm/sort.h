@@ -41,7 +41,6 @@ namespace ST
 	void sort(RandomIter begin, RandomIter end, Compare comp = Compare())
 	{
 		using DiffType = typename ST::iterator_traits<RandomIter>::difference_type;
-		std::cout << "test";
 
 		DiffType size = ST::distance(begin, end);
 		int maxDepth = 2 * ST::floor_log2(size);

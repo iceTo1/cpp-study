@@ -111,9 +111,24 @@
     <ClInclude Include="algorithm\intro_sort.h">
       <Filter>Header Files\algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="list\list_const_iterator.h">
+      <Filter>Header Files\list</Filter>
+    </ClInclude>
+    <ClInclude Include="list\list_iterator.h">
+      <Filter>Header Files\list</Filter>
+    </ClInclude>
+    <ClInclude Include="list\list_reverse_iterator.h">
+      <Filter>Header Files\list</Filter>
+    </ClInclude>
+    <ClInclude Include="list\list_const_reverse_iterator.h">
+      <Filter>Header Files\list</Filter>
+    </ClInclude>
+    <ClInclude Include="list\list_iterators.h">
+      <Filter>Header Files\list</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="vector\STVector_Test.cpp">
+    <ClCompile Include="vector\ST_STL_Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

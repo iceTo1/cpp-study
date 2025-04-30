@@ -44,7 +44,7 @@ namespace ST
 
 		RandomIter pivot = ST::partition(begin, end, comp);
 
-		ST::intro_sort(begin, pivot + 1, comp, depth - 1);
-		ST::intro_sort(pivot + 1, end, comp, depth - 1);
+		ST::intro_sort(begin, pivot, comp, depth - 1);
+		ST::intro_sort(pivot, end, comp, depth - 1);
 	}
 }

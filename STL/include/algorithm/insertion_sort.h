@@ -20,16 +20,21 @@ namespace ST
 	template <typename RandomIter, typename Compare>
 	void insertion_sort(RandomIter begin, RandomIter end, Compare comp)
 	{
-		for (RandomIter iter = begin + 1; iter != end; ++iter)
+		if (begin == end)
 		{
-			auto val = *iter;
-			RandomIter iter2 = iter - 1;
-			while (iter2 != begin && comp(val, *(iter2 - 1)))
+			return;
+		}
+
+		for (RandomIter i = begin + 1; i != end; ++i)
+		{
+			auto temp = *i;
+			RandomIter j = i;
+			while (j != begin && comp(temp, *(j - 1)))
 			{
-				*iter2 = *(iter2 - 1);
-				--iter2;
+				*j = *(j - 1);
+				--j;
 			}
-			*iter2 = val;
+			*j = temp;
 		}
 	}
 }

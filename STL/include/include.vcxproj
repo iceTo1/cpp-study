@@ -33,6 +33,11 @@
     <ClInclude Include="iterator\iterator_traits.h" />
     <ClInclude Include="iterator\next.h" />
     <ClInclude Include="iterator\prev.h" />
+    <ClInclude Include="list\list_const_iterator.h" />
+    <ClInclude Include="list\list_const_reverse_iterator.h" />
+    <ClInclude Include="list\list_iterator.h" />
+    <ClInclude Include="list\list_iterators.h" />
+    <ClInclude Include="list\list_reverse_iterator.h" />
     <ClInclude Include="list\ST_List.h" />
     <ClInclude Include="utility\move.h" />
     <ClInclude Include="utility\remove_reference.h" />
@@ -47,7 +52,7 @@
     <ClInclude Include="vector\vector_reverse_iterator.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="vector\STVector_Test.cpp" />
+    <ClCompile Include="vector\ST_STL_Test.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
