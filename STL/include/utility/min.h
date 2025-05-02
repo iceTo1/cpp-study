@@ -1,10 +1,10 @@
 #pragma once
 
 /*
-* Custom utility.h implementation by Seungtack Lee
+* Custom min function implementation by Seungtack Lee
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
-* Date: Apr 25, 2025
+* Date: May 1, 2025
 *
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.
@@ -15,8 +15,18 @@
 * https://github.com/remydzn
 */
 
-#include "move.h"
-#include "remove_reference.h"
-#include "swap.h"
-#include "max.h"
-#include "min.h"
+namespace ST
+{
+	template <typename T>
+	constexpr const T& min(const T& first, const T& second) noexcept
+	{
+		return (first < second) ? first : second;
+	}
+
+	template <typename T, typename Compare>
+	constexpr const T& max(const T& first, const T& second, Compare comp) noexcept
+	{
+		return comp(second, first) ? first : second;
+	}
+
+}

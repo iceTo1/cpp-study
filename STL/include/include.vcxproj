@@ -39,6 +39,8 @@
     <ClInclude Include="list\list_iterators.h" />
     <ClInclude Include="list\list_reverse_iterator.h" />
     <ClInclude Include="list\ST_List.h" />
+    <ClInclude Include="utility\max.h" />
+    <ClInclude Include="utility\min.h" />
     <ClInclude Include="utility\move.h" />
     <ClInclude Include="utility\remove_reference.h" />
     <ClInclude Include="utility\swap.h" />

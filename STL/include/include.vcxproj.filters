@@ -126,6 +126,12 @@
     <ClInclude Include="list\list_iterators.h">
       <Filter>Header Files\list</Filter>
     </ClInclude>
+    <ClInclude Include="utility\max.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\min.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vector\ST_STL_Test.cpp">
