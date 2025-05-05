@@ -138,7 +138,7 @@ public:
 			return this->m_pNode->m_Data;
 		}
 
-		// Operator former ++; Advance the iterator in-orderly.
+		// Operator former ++; Advance the iterator in-order.
 		iterator& operator++()
 		{
 			// Check the iterator.
@@ -158,26 +158,28 @@ public:
 				TNode<T>* currentNode = this->m_pTree->m_pRoot;
 
 				// <Finding in-order successor>
-				// Iterate while navigating node pointer is valid.
-				while (currentNode)
+				// Iterate while navigating node pointer is not this node.
+				while (currentNode != this->m_pNode)
 				{
 					// If the current node's data is bigger than this node's data,
 					if (currentNode->m_Data > this->m_pNode->m_Data)
 					{
 						// Save the current node as successor node.
 						successorNode = currentNode;
-						// Continue traversing the current node.
+						// Continue traversing the current node to find successor.
 						currentNode = currentNode->m_pLeftNode;
 					}
 					// If the current node's data is smaller than this node's data,
 					else
 					{
+						// Continue traversing to current node to find minimum node that has greater value than this node.
 						currentNode = currentNode->m_pRightNode;
 					}
 				}
+				// Update the iterator to point to the successor node.
 				this->m_pNode = successorNode;
 			}
-
+			// Return the updated iterator.
 			return *this;
 		}
 
@@ -191,6 +193,61 @@ public:
 			++(*this);
 
 			// Return the saved iterator.
+			return temp;
+		}
+
+		// Operator former --; Retreat the iterator in-order.
+		iterator& operator--()
+		{
+			// Check the iterator.
+			ValidityTest();
+
+			// Declare a node pointer to store predecessor.
+			TNode<T>* predecessor = nullptr;
+			// Declare a node pointer to store current traversing node.
+			TNode<T>* current = m_pTree->m_pRoot;
+			
+			// If this node has its left child,
+			if (this->m_pNode->m_pLeftNode)
+			{
+				// Set the predecessor to the maximum node of the left subtree.
+				predecessor = MaximumNode(m_pNode->m_pLeftNode);
+			}
+			// If this node does not have left child, 
+			else
+			{
+				// Iterate while the traversing node is not this node.
+				while (current != m_pNode)
+				{
+					// If the traversing node has bigger data than this node,
+					if (current->m_Data > m_pNode->m_Data)
+					{
+						// Continue traversing to its left child subtree.
+						current = current->m_pLeftNode;
+					}
+					// If the traversing node has smaller data than this node,
+					else
+					{
+						// Store the traversing node as predecessor.
+						predecessor = current;
+						// Continue traversing to the right subtree to find maximum node that has smaller data than this node.
+						current = current->m_pRightNode;
+					}
+				}
+				m_pNode = predecessor;
+			}
+			return *this;
+		}
+
+		// Operator latter --; Latter version of --.
+		iterator operator--(int)
+		{
+			// Store this iterator's data.
+			iterator temp = *this;
+			// Retreat this iterator.
+			--this;
+
+			// Return the stored iterator.
 			return temp;
 		}
 
@@ -289,12 +346,13 @@ TNode<T>* BinarySearchTree<T>::InsertNode(const T& data, TNode<T>* subtree_root)
 	}
 	else
 	{
-		// If the data is bigger than the given node.
+		// If the data is bigger than the given node,
 		if (data > subtree_root->m_Data)
 		{
 			// Call the function recursively to find position to insert in the right side of the tree.
 			subtree_root->m_pRightNode = InsertNode(data, subtree_root->m_pRightNode);
 		}
+		// If the data is smaller than the given node,
 		else
 		{
 			// Call the function recursively to find position to insert in the left side of the tree.

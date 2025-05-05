@@ -48,7 +48,7 @@ int main()
 			List_Test();
 			break;
 		case 0:
-			return;
+			return 0;
 		default:
 			std::cout << "Choose valid option (0 to 2)";
 		}

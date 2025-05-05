@@ -24,7 +24,7 @@ namespace ST
 	}
 
 	template <typename T, typename Compare>
-	constexpr const T& max(const T& first, const T& second, Compare comp) noexcept
+	constexpr const T& min(const T& first, const T& second, Compare comp) noexcept
 	{
 		return comp(second, first) ? first : second;
 	}
