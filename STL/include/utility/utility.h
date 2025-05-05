@@ -20,3 +20,5 @@
 #include "swap.h"
 #include "max.h"
 #include "min.h"
+#include "pair.h"
+#include "make_pair.h"
