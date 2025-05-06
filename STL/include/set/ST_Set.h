@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-* Custom AVL Tree implementation by Seungtack Lee
+* Custom Set implementation by Seungtack Lee
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
 * Date: May 5~, 2025
@@ -15,79 +15,16 @@
 * https://github.com/remydzn
 */
 
-/** 
-* @brief Characteristics of Red Black Tree
-* @details 
-* 1. Root node has to be Black.
-* 2. Red nodes cannot have red children.
-* 3. Every path from radom node to all nil nodes have the same number of black nodes (Black Height).
-* 4. ALL leaves (nils) are Black.
-* 5. New inserted nodes are always Red.
-* 
-* @author Seungtack Lee
-* @date May 5, 2025
-*/
-
-#include "../utility/utility.h"
-#include "set_iterators.h"
-
+#include "../tree/ST_RBTree.h"
 
 namespace ST
 {
-	// enum Class for tree colors.
-	enum class COLOR
-	{
-		RED,
-		BLACK,
-	};
-
-	template <typename T>
-	class set; // Declaration of set.
-
-	template <typename T>
-	class RBNode
-	{
-	private:
-		T m_Data;				// Member variable to store data.
-		COLOR color;			// Member variable to store node color.
-		RBNode<T>* m_Parent;	// Member variable to store parent node.
-		RBNode<T>* m_LChild;	// Member variable to store left child.
-		RBNode<T>* m_RChild;	// Member variable to store right child.
-
-	public:
-		// Constructor; Initialize the node with given data, set the node for insertion.
-		RBNode(const T& data)
-			: m_Data(data)
-			, color(COLOR::RED)
-			, m_Parent(nullptr)
-			, m_LChild(nullptr)
-			, m_RChild(nullptr)
-		{ }
-
-		friend class set<T>;	// Grant access to private member by set class. 
-	};
-
 	template <typename T>
 	class set
 	{
 	private:
-		RBNode<T>* m_Root;	// Member variable to store the root node.
-		RBNode<T>* nil;		// Member variable for nil node.
+		RBTree<T> m_Tree;	// Member variable to store the redblack tree.
 	
-	private:
-		// Helper Functions
-		// Init_nil Function; Initialize the nil node to use, and mark leaf nodes.
-		void Init_nil()
-		{
-			// Create a new node and assign it to 'nil'.
-			nil = new RBNode<T>(T());
-			// Initialize the 'nil' node to its own properties.
-			nil->color = COLOR::BLACK;
-			nil->m_Parent = nullptr;
-			nil->m_LChild = nullptr;
-			nil->m_RChild = nullptr;
-		}
-
 	public:
 		// Assigning traits for iterator functions.
 		using value_type = T;
@@ -99,60 +36,58 @@ namespace ST
 		using difference_type = int;
 
 		// Using shorter name for iterators.
-		using iterator = set_iterator<T>;
-		using const_iterator = set_const_iterator<T>;
-		using reverse_iterator = set_reverse_iterator<T>;
-		using const_reverse_iterator = set_const_reverse_iterator<T>;
+		using iterator = typename RBTree<T>::iterator;
+		using const_iterator = typename RBTree<T>::const_iterator;
+		using reverse_iterator = typename RBTree<T>::reverse_iterator;
+		using const_reverse_iterator = typename RBTree<T>::const_reverse_iterator;
 
 	public:
 		// RBTree Functions
 		// empty Function; Check if the tree is empty.
-		bool empty() const;
+		bool empty() const { return m_Tree.empty(); }
 		// size Function; Return the size of the tree.
-		size_t size() const;
+		size_t size() const { return m_Tree.size(); }
 		// clear Function; Erase all the data from the tree.
-		void clear();
+		void clear() { m_Tree.clear(); }
 		// insert Function; Insert the given value to the tree.
-		ST::pair<iterator, bool> insert(const T& value);
+		ST::pair<iterator, bool> insert(const T& value) { return m_Tree.insert(value); }
 		// erase Function; Erase the given value from the tree.
-		size_t erase(const T& value);
+		size_t erase(const T& value) { return m_Tree.erase(value); }
 		// find Function; Find the given value from the tree.
-		iterator find(const T& value);
+		iterator find(const T& value) { return m_Tree.find(value); }
 		// count Function; Count the number of value from the tree.
-		size_t count(const T& value) const;
+		size_t count(const T& value) const { return m_Tree.count(value); }
 
 		// Iterator Functions
 		// begin Function; Return the iterator that points to the left most node.
-		iterator begin();
+		iterator		begin()			{ return m_Tree.begin(); }
 		// end Function; Return the iterator that points to nil node.
-		iterator end();
-		// cbegin Function; Constant version of begin function.
-		const_iterator cbegin() const;
-		// cend Function; Constant version of end function.
-		const_iterator cend() const;
+		iterator		end()			{ return m_Tree.end(); }
+		// begin Function; Constant version of begin function.
+		const_iterator	begin() const	{ return m_Tree.begin(); }
+		// end Function; Constant version of end function.
+		const_iterator	end() const		{ return m_Tree.end(); }
+		// cbegin Function; Constant version of begin function that returns constant iterator explicitly.
+		const_iterator	cbegin() const	{ return m_Tree.cbegin(); }
+		// cend Function; Constant version of end function that returns constant iterator explicitly.
+		const_iterator	cend() const	{ return m_Tree.cend(); }
+
 		// rbegin Function; Return the reverse iterator that points to the right most node.
-		reverse_iterator rbegin();
+		reverse_iterator		rbegin()		{ return m_Tree.rbegin(); }
 		// rend Function; Return the reverse iterator that points to nil node.
-		reverse_iterator rend();
-		// crbegin Function; Constant version of rbegin function.
-		const_reverse_iterator crbegin();
-		// crend Function; Constant version of rend function.
-		const_reverse_iterator crend();
+		reverse_iterator		rend()			{ return m_Tree.rend(); }
+		// rbegin Function; Constant version of rbegin function.
+		const_reverse_iterator	rbegin() const	{ return m_Tree.rbegin(); }
+		// rend Function; Constant version of rend function.
+		const_reverse_iterator	rend() const	{ return m_Tree.rend(); }
+		// crbegin Function; Constant version of rbegin function that returns constant reverse iterator explicitly.
+		const_reverse_iterator	crbegin()		{ return m_Tree.crbegin(); }
+		// crend Function; Constant version of rend function that returns constant reverse iterator explicitly.
+		const_reverse_iterator	crend()			{ return m_Tree.crend(); }
 
 	public:
 		// Constructor; Initialize the root node to nothing, then set the root as 'nil'.
-		set()
-			: m_Root(nullptr)
-		{
-			// Initialize nil node.
-			Init_nil();
-			m_Root = nil;
-		}
-		~set()
-		{
-			// Delete all data.
-			clear();
-			delete nil;
-		}
+		set() = default;
+		~set() = default;
 	};
 }

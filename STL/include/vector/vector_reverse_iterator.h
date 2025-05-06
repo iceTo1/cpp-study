@@ -77,7 +77,7 @@ namespace ST
 
 		// Operator overload
 		// Operator *; Access the value like pointer.
-		T& operator* ()
+		reference operator* ()
 		{
 			// Test iterator.
 			ValidityTest();

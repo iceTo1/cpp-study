@@ -58,7 +58,7 @@ namespace ST
 		}
 		// Operator Overloading.
 		// Operator Former *; Access the data that the reverse_iterator is pointing.
-		T& operator *()
+		reference operator *()
 		{
 			// Check iterator.
 			ValidityTest();

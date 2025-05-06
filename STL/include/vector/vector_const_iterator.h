@@ -65,7 +65,7 @@ namespace ST
 
 		// Operator overload
 		// constant Operator *; Access the value like pointer; Cannot overwrite the constant data type.
-		const T& operator* () const
+		reference operator* () const
 		{
 			// Test iterator.
 			ValidityTest();

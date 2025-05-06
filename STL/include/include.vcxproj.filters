@@ -31,6 +31,12 @@
     <Filter Include="Header Files\list">
       <UniqueIdentifier>{cab297ca-441b-46ba-a3f6-6767931878ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\set">
+      <UniqueIdentifier>{91108e0e-4c92-4589-81da-ba1780a2b35b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tree">
+      <UniqueIdentifier>{adf7f1a3-0b0d-4144-a1a3-e6c2043934e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm\sort.h">
@@ -131,6 +137,33 @@
     </ClInclude>
     <ClInclude Include="utility\min.h">
       <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="set\ST_Set.h">
+      <Filter>Header Files\set</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\make_pair.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\pair.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="tree\ST_RBTree.h">
+      <Filter>Header Files\tree</Filter>
+    </ClInclude>
+    <ClInclude Include="tree\rbtree_iterator.h">
+      <Filter>Header Files\tree</Filter>
+    </ClInclude>
+    <ClInclude Include="tree\rbtree_iterators.h">
+      <Filter>Header Files\tree</Filter>
+    </ClInclude>
+    <ClInclude Include="tree\rbtree_const_iterator.h">
+      <Filter>Header Files\tree</Filter>
+    </ClInclude>
+    <ClInclude Include="tree\rbtree_reverse_iterator.h">
+      <Filter>Header Files\tree</Filter>
+    </ClInclude>
+    <ClInclude Include="tree\rbtree_const_reverse_iterator.h">
+      <Filter>Header Files\tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

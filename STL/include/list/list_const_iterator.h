@@ -56,7 +56,7 @@ namespace ST
 		}
 		// Operator Overloading.
 		// Operator Former *; Access the data that the const_iterator is pointing.
-		const T& operator *() const
+		reference operator *() const
 		{
 			// Check iterator.
 			ValidityTest();

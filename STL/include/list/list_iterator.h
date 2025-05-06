@@ -56,7 +56,7 @@ namespace ST
 		}
 		// Operator Overloading.
 		// Operator Former *; Access the data that the iterator is pointing.
-		T& operator *()
+		reference operator *()
 		{
 			// Check iterator.
 			ValidityTest();
