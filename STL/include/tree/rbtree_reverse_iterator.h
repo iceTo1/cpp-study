@@ -19,11 +19,11 @@
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Comparator>
 	class rbtree_reverse_iterator
 	{
 	private:
-		RBTree<T>* m_Tree;
+		RBTree<T, Comparator>* m_Tree;
 		RBNode<T>* m_Node;
 	public:
 		// Vector traits for iterator functions.
@@ -76,7 +76,7 @@ namespace ST
 			, m_Node(nullptr)
 		{
 		}
-		rbtree_reverse_iterator(RBTree<T>* tree, RBNode<T>* node)
+		rbtree_reverse_iterator(RBTree<T, Comparator>* tree, RBNode<T>* node)
 			: m_Tree(tree)
 			, m_Node(node)
 		{

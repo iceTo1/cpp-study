@@ -20,11 +20,11 @@
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Comparator>
 	class rbtree_iterator
 	{
 	private:
-		RBTree<T>* m_Tree;
+		RBTree<T, Comparator>* m_Tree;
 		RBNode<T>* m_Node;
 	public:
 		// Vector traits for iterator functions.
@@ -43,7 +43,7 @@ namespace ST
 
 		rbtree_iterator& operator++ ()
 		{
-			m_Node = m_Tree->Sucessor(m_Node);
+			m_Node = m_Tree->Successor(m_Node);
 
 			return *this;
 		}
@@ -76,7 +76,7 @@ namespace ST
 			: m_Tree(nullptr)
 			, m_Node(nullptr)
 		{ }
-		rbtree_iterator(RBTree<T>* tree, RBNode<T>* node)
+		rbtree_iterator(RBTree<T, Comparator>* tree, RBNode<T>* node)
 			: m_Tree(tree)
 			, m_Node(node)
 		{ }

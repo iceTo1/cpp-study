@@ -30,6 +30,7 @@
 
 #include "../utility/utility.h"
 #include "rbtree_iterators.h"
+#include "../functional/functional.h"
 
 namespace ST
 {
@@ -40,7 +41,7 @@ namespace ST
 		BLACK,
 	};
 
-	template <typename T>
+	template <typename T, typename Comparator>
 	class RBTree; // Declaration of set.
 
 	template <typename T>
@@ -75,12 +76,13 @@ namespace ST
 		friend class RBTree<T>;	// Grant access to private member by set class. 
 	};
 
-	template <typename T>
+	template <typename T, typename Comparator = ST::less<T>>
 	class RBTree
 	{
 	private:
-		RBNode<T>* m_Root;		// Member variable to store the root node.
-		RBNode<T>* const nil;	// Member variable for nil node.
+		RBNode<T>* m_Root;	// Member variable to store the root node.
+		RBNode<T>* nil;		// Member variable for nil node.
+		Comparator comp;	// Member variable for custom comparator.
 
 	private:
 		// Helper Functions
@@ -118,10 +120,10 @@ namespace ST
 		using difference_type = int;
 
 		// Using shorter name for iterators.
-		using iterator = rbtree_iterator<T>;
-		using const_iterator = rbtree_const_iterator<T>;
-		using reverse_iterator = rbtree_reverse_iterator<T>;
-		using const_reverse_iterator = rbtree_const_reverse_iterator<T>;
+		using iterator = rbtree_iterator<T, Comparator>;
+		using const_iterator = rbtree_const_iterator<T, Comparator>;
+		using reverse_iterator = rbtree_reverse_iterator<T, Comparator>;
+		using const_reverse_iterator = rbtree_const_reverse_iterator<T, Comparator>;
 
 	public:
 		// RBTree Functions
@@ -133,6 +135,11 @@ namespace ST
 		void clear();
 		// insert Function; Insert the given value to the tree.
 		ST::pair<iterator, bool> insert(const T& value);
+
+		// insert Function; Supports rvalue and lvalue insertion by forwarding the given value.
+		template <typename U>
+		ST::pair<iterator, bool> insert(U&& value);
+
 		// erase Function; Erase the given value from the tree.
 		size_t erase(const T& value);
 		// find Function; Find the given value from the tree.
@@ -185,15 +192,15 @@ namespace ST
 			delete nil;
 		}
 
-		friend class rbtree_iterator<T>;
-		friend class rbtree_const_iterator<T>;
-		friend class rbtree_reverse_iterator<T>;
-		friend class rbtree_const_reverse_iterator<T>;
+		friend class rbtree_iterator<T, Comparator>;
+		friend class rbtree_const_iterator<T, Comparator>;
+		friend class rbtree_reverse_iterator<T, Comparator>;
+		friend class rbtree_const_reverse_iterator<T, Comparator>;
 	};
 
 	// [Helper] Init_nil Function; Initialize the nil node to use, and mark leaf nodes.
-	template <typename T>
-	void RBTree<T>::Init_nil()
+	template <typename T, typename Comparator>
+	void RBTree<T, Comparator>::Init_nil()
 	{
 		// Create a new node and assign it to 'nil'.
 		nil = new RBNode<T>();
@@ -205,8 +212,8 @@ namespace ST
 	}
 
 	// [Helper] CountNodes Function; Count the number of nodes in the subtree.
-	template<typename T>
-	size_t RBTree<T>::CountNodes(RBNode<T>* node) const
+	template <typename T, typename Comparator>
+	size_t RBTree<T, Comparator>::CountNodes(RBNode<T>* node) const
 	{
 		// If the node is empty,
 		if (nil == node)
@@ -219,8 +226,8 @@ namespace ST
 	}
 
 	// [Helper] ClearSubtree Function; Erase data from the subtree.
-	template<typename T>
-	void RBTree<T>::ClearSubtree(RBNode<T>* node)
+	template <typename T, typename Comparator>
+	void RBTree<T, Comparator>::ClearSubtree(RBNode<T>* node)
 	{
 		// If the node is empty (base case),
 		if (nil == node)
@@ -237,8 +244,8 @@ namespace ST
 	}
 
 	// [Helper] MinimumNode Function; Find the minimum node from the given node as root.
-	template<typename T>
-	const RBNode<T>* RBTree<T>::MinimumNode(const RBNode<T>* node) const
+	template <typename T, typename Comparator>
+	const RBNode<T>* RBTree<T, Comparator>::MinimumNode(const RBNode<T>* node) const
 	{
 		// Iterate while the node has left child.
 		while (nil != node->m_LChild)
@@ -251,8 +258,8 @@ namespace ST
 	}
 
 	// [Helper] Successor Function; Find the appropriate successsor node.
-	template<typename T>
-	const RBNode<T>* RBTree<T>::Successor(const RBNode<T>* node)
+	template <typename T, typename Comparator>
+	const RBNode<T>* RBTree<T, Comparator>::Successor(const RBNode<T>* node)
 	{
 		// If the given node has right child,
 		if (nil != node->m_RChild)
@@ -278,8 +285,8 @@ namespace ST
 	}
 
 	// [Helper] MaximumNode Function; Find the maximum node from the given node as root.
-	template<typename T>
-	const RBNode<T>* RBTree<T>::MaximumNode(const RBNode<T>* node) const
+	template<typename T, typename Comparator>
+	const RBNode<T>* RBTree<T, Comparator>::MaximumNode(const RBNode<T>* node) const
 	{
 		// Iterate while the node has right child.
 		while (nil != node->m_RChild)
@@ -292,8 +299,8 @@ namespace ST
 	}
 
 	// [Helper] Predeccessor Function; Find the appropriate successsor node.
-	template<typename T>
-	const RBNode<T>* RBTree<T>::Predecessor(const RBNode<T>* node)
+	template<typename T, typename Comparator>
+	const RBNode<T>* RBTree<T, Comparator>::Predecessor(const RBNode<T>* node)
 	{
 		// If the node has its left child,
 		if (nil != node->m_LChild)
@@ -320,8 +327,8 @@ namespace ST
 	}
 
 	// [Helper] InsertNode Function; Insert the node that has given value as its data.
-	template<typename T>
-	RBNode<T>* RBTree<T>::InsertNode(const T& value)
+	template<typename T, typename Comparator>
+	RBNode<T>* RBTree<T, Comparator>::InsertNode(const T& value)
 	{
 		// Create a new node with given value.
 		RBNode<T>* newNode = new RBNode<T>(value);
@@ -374,8 +381,8 @@ namespace ST
 	}
 
 	// [Helper] FixInsert Function; Check the balance and fix the tree structure after insertion.
-	template<typename T>
-	void RBTree<T>::FixInsert(RBNode<T>* node)
+	template<typename T, typename Comparator>
+	void RBTree<T, Comparator>::FixInsert(RBNode<T>* node)
 	{
 		/**
 		* 1. Check if parent is red.
@@ -463,8 +470,8 @@ namespace ST
 	}
 
 	// [Helper] RotateLeft Function; Rotate left to solve imbalance.
-	template<typename T>
-	void RBTree<T>::RotateLeft(RBNode<T>* node)
+	template<typename T, typename Comparator>
+	void RBTree<T, Comparator>::RotateLeft(RBNode<T>* node)
 	{
 		// Declare node pointers for left rotation.
 		RBNode<T>* node_x = node->m_RChild;
@@ -502,8 +509,8 @@ namespace ST
 	}
 
 	// [Helper] RotateRight Function; Rotate right to solve imbalance.
-	template<typename T>
-	void RBTree<T>::RotateRight(RBNode<T>* node)
+	template<typename T, typename Comparator>
+	void RBTree<T, Comparator>::RotateRight(RBNode<T>* node)
 	{
 		// Declare node pointers for left rotation.
 		RBNode<T>* node_x = node->m_LChild;
@@ -541,24 +548,24 @@ namespace ST
 	}
 
 	// empty Function; Check if the tree is empty.
-	template<typename T>
-	inline bool RBTree<T>::empty() const
+	template<typename T, typename Comparator>
+	inline bool RBTree<T, Comparator>::empty() const
 	{
 		// Check if the root node is nil node.
 		return (m_Root == nil);
 	}
 
 	// size Function; Return the size of the tree.
-	template<typename T>
-	size_t RBTree<T>::size() const
+	template<typename T, typename Comparator>
+	size_t RBTree<T, Comparator>::size() const
 	{
 		// Call CountNodes function for total node count.
 		return CountNodes(m_Root);
 	}
 
 	// clear Function; Erase all the data from the tree.
-	template<typename T>
-	void RBTree<T>::clear()
+	template<typename T, typename Comparator>
+	void RBTree<T, Comparator>::clear()
 	{
 		// If the tree is already empty,
 		if (empty())
@@ -573,8 +580,8 @@ namespace ST
 	}
 
 	// insert Function; Insert the given value to the tree.
-	template<typename T>
-	ST::pair<typename RBTree<T>::iterator, bool> RBTree<T>::insert(const T& value)
+	template<typename T, typename Comparator>
+	ST::pair<typename RBTree<T, Comparator>::iterator, bool> RBTree<T, Comparator>::insert(const T& value)
 	{
 		// If duplicate is found,
 		if (find(value) != end())
@@ -591,8 +598,8 @@ namespace ST
 	}
 
 	// find Function; Find the given value from the tree.
-	template<typename T>
-	typename RBTree<T>::iterator RBTree<T>::find(const T& value)
+	template<typename T, typename Comparator>
+	typename RBTree<T, Comparator>::iterator RBTree<T, Comparator>::find(const T& value)
 	{
 		// Declrae a node pointer to traverse from the root.
 		RBNode<T>* current = m_Root;
@@ -625,8 +632,8 @@ namespace ST
 	}
 
 	// find Function; Constant version of the find Function.
-	template<typename T>
-	typename RBTree<T>::const_iterator RBTree<T>::find(const T& value) const
+	template<typename T, typename Comparator>
+	typename RBTree<T, Comparator>::const_iterator RBTree<T, Comparator>::find(const T& value) const
 	{
 		// Declrae a node pointer to traverse from the root.
 		RBNode<T>* current = m_Root;
@@ -659,11 +666,21 @@ namespace ST
 	}
 	
 	// count Function; Count the number of value from the tree.
-	template<typename T>
-	size_t RBTree<T>::count(const T& value) const
+	template<typename T, typename Comparator>
+	size_t RBTree<T, Comparator>::count(const T& value) const
 	{
 		// If the value is found, return 1.
 		// Otherwise, return 0.
 		return (find(value) != end()) ? 1 : 0;
+	}
+	
+	// insert Function; Supports rvalue and lvalue insertion by forwarding the given value. 
+	template<typename T, typename Comparator>
+	template<typename U>
+	ST::pair<typename RBTree<T, Comparator>::iterator, bool> RBTree<T, Comparator>::insert(U&& value)
+	{
+
+
+		return ST::pair<iterator, bool>();
 	}
 }
