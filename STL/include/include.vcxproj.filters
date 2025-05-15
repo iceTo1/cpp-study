@@ -37,6 +37,12 @@
     <Filter Include="Header Files\tree">
       <UniqueIdentifier>{adf7f1a3-0b0d-4144-a1a3-e6c2043934e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\type_traits">
+      <UniqueIdentifier>{34d8e0ee-5c82-4281-9f89-e8065cdaf1ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\allocator">
+      <UniqueIdentifier>{5f28c3d7-4310-4615-a366-f8e1ced718ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm\sort.h">
@@ -164,6 +170,21 @@
     </ClInclude>
     <ClInclude Include="tree\rbtree_const_reverse_iterator.h">
       <Filter>Header Files\tree</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\forward.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="type_traits\is_lvalue_reference.h">
+      <Filter>Header Files\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="type_traits\is_rvalue_reference.h">
+      <Filter>Header Files\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="allocator\ST_Allocator.h">
+      <Filter>Header Files\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="allocator\allocator_traits.h">
+      <Filter>Header Files\allocator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

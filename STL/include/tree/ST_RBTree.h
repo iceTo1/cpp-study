@@ -31,6 +31,7 @@
 #include "../utility/utility.h"
 #include "rbtree_iterators.h"
 #include "../functional/functional.h"
+#include <initializer_list>
 
 namespace ST
 {
@@ -102,12 +103,18 @@ namespace ST
 		const RBNode<T>* Predecessor(const RBNode<T>* node);
 		// [Helper] InsertNode Function; Insert the node that has given value as its data.
 		RBNode<T>* InsertNode(const T& value);
+		// [Helper] InsertNode Function; InsertNode function with rvalue support.
+		RBNode<T>* InsertNode(T&& value);
 		// [Helper] FixInsert Function; Check the balance and fix the tree structure after insertion.
 		void FixInsert(RBNode<T>* node);
 		// [Helper] RotateLeft Function; Rotate left to solve imbalance.
 		void RotateLeft(RBNode<T>* node);
 		// [Helper] RotateRight Function; Rotate right to solve imbalance.
 		void RotateRight(RBNode<T>* node);
+		// [Helper] DeleteNode Function; Delete node.
+		void DeleteNode(RBNode<T>* node);
+		// [Helper] FixDelete Function; Check the balance and fix the tree structure after deletion.
+		void FixDelete(RBNode<T>* node);
 
 	public:
 		// Assigning traits for iterator functions.
@@ -139,6 +146,8 @@ namespace ST
 		// insert Function; Supports rvalue and lvalue insertion by forwarding the given value.
 		template <typename U>
 		ST::pair<iterator, bool> insert(U&& value);
+		// insert Function; Supports inserting operation with list.
+		void insert(std::initializer_list<T> list);
 
 		// erase Function; Erase the given value from the tree.
 		size_t erase(const T& value);
@@ -380,6 +389,60 @@ namespace ST
 		return newNode;
 	}
 
+	// [Helper] InsertNode Function; InsertNode function with rvalue support.
+	template<typename T, typename Comparator>
+	RBNode<T>* RBTree<T, Comparator>::InsertNode(T&& value)
+	{
+		// Create a new node using move constructor.
+		RBNode<T>* newNode = new RBNode<T>(ST::move(value));
+		newNode->m_LChild = nil;
+		newNode->m_RChild = nil;
+
+		// Declare variables for traversal.
+		RBNode<T>* parent = nullptr;
+		RBNode<T>* current = m_Root;
+
+		// Search for place to insert the node (find parent and insert to its child).
+		// Iterate while the current node is not the nil node.
+		while (current != nil)
+		{
+			// Update the parent to the current node.
+			parent = current;
+			// Update the current node.
+			if (value < current->m_Data)
+			{
+				current = current->m_LChild;
+			}
+			else
+			{
+				current = current->m_RChild;
+			}
+		}
+
+		// Connect the parent of the new node.
+		newNode->m_Parent = parent;
+
+		// If the node is being inserted as root node,
+		if (nil == m_Root)
+		{
+			m_Root = newNode;
+		}
+		// Otherwise, insert the new node to the appropriate child of its parent node.
+		else if (value < parent->m_Data)
+		{
+			parent->m_LChild = newNode;
+		}
+		else
+		{
+			parent->m_RChild = newNode;
+		}
+
+		// Call function to balance the tree after insertion.
+		FixInsert(newNode);
+
+		return newNode;
+	}
+
 	// [Helper] FixInsert Function; Check the balance and fix the tree structure after insertion.
 	template<typename T, typename Comparator>
 	void RBTree<T, Comparator>::FixInsert(RBNode<T>* node)
@@ -547,6 +610,175 @@ namespace ST
 			node_c->m_Parent = node; // nil node's parent has to be nullptr.
 	}
 
+	// [Helper] DeleteNode Function; Delete node.
+	template<typename T, typename Comparator>
+	void RBTree<T, Comparator>::DeleteNode(RBNode<T>* node)
+	{
+		// If the given node is alrady invalid,
+		if (nullptr == node || node == nil)
+		{
+			// Do nothing.
+			return;
+		}
+		// If the node has no child, or one children,
+		if (node->m_LChild == nil || node->m_RChild == nil)
+		{
+			// Create a variable to store child node, and assign existing child node.
+			RBNode<T>* child = (node->m_LChild != nil) ? node->m_LChild : node->m_RChild;
+			// Store the node's color before fixing.
+			COLOR node_color = node->color;
+			// Store the node's child node as fixing target.
+			RBNode<T>* fix_target = child;
+
+			// Connect the parent pointer.
+			// If the deleting node was the root node,
+			if (node->m_Parent == nullptr)
+			{
+				// Update the root node to child node.
+				m_Root = child;
+			}
+			// If the deleting node was left child,
+			else if (node == node->m_Parent->m_LChild)
+			{
+				// Update the parent node's child to the child node.
+				node->m_Parent->m_LChild = child;
+			}
+			// If the deleting node was right child,
+			else
+			{
+				// Update the parent node's child to the child node.
+				node->m_Parent->m_RChild = child;
+			}
+			// If the child node is not nil node,
+			if (nil != child)
+			{
+				// Update the child node's parent node.
+				child->m_Parent = node->m_Parent;
+			}
+
+			// Delete the node.
+			delete node;
+
+			// If the node's color was black,
+			if (COLOR::BLACK == node_color)
+			{
+				// Fix the balance after deletion.
+				FixDelete(fix_target);
+			}
+		}
+		// If the node has both children,
+		else
+		{
+			// Declare a node pointer for successor.
+			RBNode<T>* successor = Successor(node);
+			// Overwrite the node's data to to the successor's data, and delete the successor node.
+			node->m_Data = successor->m_Data;
+			DeleteNode(const_cast<RBNode<T>*>(successor));
+		}
+	}
+
+	// [Helper] FixDelete Function; Check the balance and fix the tree structure after deletion.
+	template<typename T, typename Comparator>
+	void RBTree<T, Comparator>::FixDelete(RBNode<T>* node)
+	{
+		// When the deleted node was 'black', it breaks the rule of RB Tree.
+		// The given node is the node that needs rebalancing after deletion.
+		
+		
+		// Iterate while the given node is not a root, and the node's color is black.
+		// 
+		while (node != m_Root && node->color == COLOR::BLACK)
+		{
+			// If the given node is left child,
+			if (node == node->m_Parent->m_LChild)
+			{
+				// Declare a node pointer for sibling node.
+				RBNode<T>* sib = node->m_Parent->m_RChild;
+
+				// Case 1: If the sibling is red, 
+				if (sib->color == COLOR::RED)
+				{
+					// Switch the color of parent and rotate left.
+					sib->color = COLOR::BLACK;
+					node->m_Parent->color = COLOR::RED;
+					RotateLeft(node->m_Parent);
+					// Update the sibling node.
+					sib = node->m_Parent->m_RChild;
+				}
+				// Case 2: If the sibling and the node's child are both black,
+				if (sib->m_LChild->color == COLOR::BLACK && sib->m_RChild->color == COLOR::BLACK)
+				{
+					// Switch the sibling's color to the red.
+					sib->color = COLOR::RED;
+					// Fix the balance with parent node.
+					node = node->m_Parent;
+				}
+				else
+				{
+					// Case 3: If the sibling is black, right child is black, and left child is red,
+					if (sib->color == COLOR::BLACK)
+					{
+						sib->m_LChild->color = COLOR::BLACK;
+						sib->color = COLOR::RED;
+						RotateRight(sib);
+						sib = node->m_Parent->m_RChild;
+					}
+
+					// Case 4: If the sibling's right child is red,
+					sib->color = node->m_Parent->color;
+					node->m_Parent->color = COLOR::BLACK;
+					sib->m_RChild->color = COLOR::BLACK;
+					RotateLeft(node->m_Parent);
+					node = m_Root;
+				}
+			}
+			// If the given node is right child,
+			else
+			{
+				// Declare a node pointer for sibling node.
+				RBNode<T>* sib = node->m_Parent->m_LChild;
+
+				// Case 1: If the sibling is red, 
+				if (sib->color == COLOR::RED)
+				{
+					// Switch the color of parent and rotate left.
+					sib->color = COLOR::BLACK;
+					node->m_Parent->color = COLOR::RED;
+					RotateRight(node->m_Parent);
+					// Update the sibling node.
+					sib = node->m_Parent->m_LChild;
+				}
+				// Case 2: If the sibling and the node's child are both black,
+				if (sib->m_LChild->color == COLOR::BLACK && sib->m_RChild->color == COLOR::BLACK)
+				{
+					// Switch the sibling's color to the red.
+					sib->color = COLOR::RED;
+					// Fix the balance with parent node.
+					node = node->m_Parent;
+				}
+				else
+				{
+					// Case 3: If the sibling is black, right child is black, and left child is red,
+					if (sib->color == COLOR::BLACK)
+					{
+						sib->m_RChild->color = COLOR::BLACK;
+						sib->color = COLOR::RED;
+						RotateLeft(sib);
+						sib = node->m_Parent->m_LChild;
+					}
+
+					// Case 4: If the sibling's right child is red,
+					sib->color = node->m_Parent->color;
+					node->m_Parent->color = COLOR::BLACK;
+					sib->m_LChild->color = COLOR::BLACK;
+					RotateRight(node->m_Parent);
+					node = m_Root;
+				}
+			}
+		}
+		node->color = COLOR::BLACK;
+	}
+
 	// empty Function; Check if the tree is empty.
 	template<typename T, typename Comparator>
 	inline bool RBTree<T, Comparator>::empty() const
@@ -595,6 +827,36 @@ namespace ST
 
 		// Return the pair with iterator and boolean value.
 		return ST::make_pair(iterator(this, newNode), true);
+	}
+
+	// insert Function; Supports inserting operation with list.
+	template<typename T, typename Comparator>
+	void RBTree<T, Comparator>::insert(std::initializer_list<T> list)
+	{
+		for (const T& val : list)
+		{
+			insert(val);
+		}
+	}
+
+	// erase Function; Erase the given value from the tree.
+	template<typename T, typename Comparator>
+	size_t RBTree<T, Comparator>::erase(const T& value)
+	{
+		// Declare a variable to check if the deleting value exists.
+		auto val = find(value);
+		// If the value is not found,
+		if (val == end())
+		{
+			// Return 0.
+			return 0;
+		}
+
+		// If the deleting value exists,
+		// Perform deletion with helper function.
+		DeleteNode(val.m_Node);
+
+		return 1;
 	}
 
 	// find Function; Find the given value from the tree.
@@ -679,8 +941,17 @@ namespace ST
 	template<typename U>
 	ST::pair<typename RBTree<T, Comparator>::iterator, bool> RBTree<T, Comparator>::insert(U&& value)
 	{
+		// If the duplicate value is found,
+		if (find(value) != end())
+		{
+			// Return the result with that found value, paired with false.
+			return ST::make_pair(find(value), false);
+		}
 
+		// Create new node with given data.
+		RBNode<T>* newNode = InsertNode(ST::forward<U>(value));
 
-		return ST::pair<iterator, bool>();
+		// Return the iterator that points to the new node, paired with true.
+		return ST::make_pair(iterator(this, newNode), true);
 	}
 }

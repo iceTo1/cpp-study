@@ -20,17 +20,17 @@
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Alloc>
 	class vector;
 
-	template <typename T>
+	template <typename T, typename Alloc = STAllocator<T>>
 	class vector_iterator
 	{
 	private:
-		ST::vector<T>*	m_vectorPtr;	// Pointer to point vector
-		T*				m_pData;		// Pointed value
-		int				m_idx;			// Use -1 for end iterator
-		bool			m_isValid;		// Check if the iterator is valid (not modified)
+		ST::vector<T, Alloc>*	m_vectorPtr;	// Pointer to point vector
+		T*						m_pData;		// Pointed value
+		int						m_idx;			// Use -1 for end iterator
+		bool					m_isValid;		// Check if the iterator is valid (not modified)
 	
 	public:
 		// Vector traits for iterator functions.
@@ -256,7 +256,7 @@ namespace ST
 		}
 
 		// iterator parameterized Constructor; Initialized the members by given values.
-		vector_iterator(vector<T>* vector, T* data, int idx)
+		vector_iterator(vector<T, Alloc>* vector, T* data, int idx)
 			: m_vectorPtr(vector)
 			, m_pData(data)
 			, m_idx(idx)
@@ -275,6 +275,6 @@ namespace ST
 		}
 
 		// Declare friend to access private members of vector.
-		friend class ST::vector<T>;
+		friend class ST::vector<T, Alloc>;
 	};
 }

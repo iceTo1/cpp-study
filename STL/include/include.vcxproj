@@ -24,6 +24,8 @@
     <ClInclude Include="algorithm\intro_sort.h" />
     <ClInclude Include="algorithm\quick_sort.h" />
     <ClInclude Include="algorithm\sort.h" />
+    <ClInclude Include="allocator\allocator_traits.h" />
+    <ClInclude Include="allocator\ST_Allocator.h" />
     <ClInclude Include="functional\functional.h" />
     <ClInclude Include="functional\greater.h" />
     <ClInclude Include="functional\less.h" />
@@ -46,6 +48,9 @@
     <ClInclude Include="tree\rbtree_iterators.h" />
     <ClInclude Include="tree\rbtree_reverse_iterator.h" />
     <ClInclude Include="tree\ST_RBTree.h" />
+    <ClInclude Include="type_traits\is_lvalue_reference.h" />
+    <ClInclude Include="type_traits\is_rvalue_reference.h" />
+    <ClInclude Include="utility\forward.h" />
     <ClInclude Include="utility\make_pair.h" />
     <ClInclude Include="utility\max.h" />
     <ClInclude Include="utility\min.h" />

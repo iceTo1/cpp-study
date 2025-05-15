@@ -20,17 +20,17 @@
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Alloc>
 	class vector;
 
-	template <typename T>
+	template <typename T, typename Alloc = STAllocator<T>>
 	class vector_const_reverse_iterator
 	{
 	private:
-		const ST::vector<T>*	m_vectorPtr;	// Constant type vector pointer
-		const T*				m_pData;		// Constant type data pointer
-		int						m_idx;			// Index variable (cannot be constant; need to point different elements)
-		bool					m_isValid;		// Validity variable (cannot be constant; need to check validity)
+		const ST::vector<T, Alloc>*	m_vectorPtr;	// Constant type vector pointer
+		const T*					m_pData;		// Constant type data pointer
+		int							m_idx;			// Index variable (cannot be constant; need to point different elements)
+		bool						m_isValid;		// Validity variable (cannot be constant; need to check validity)
 
 	public:
 		// Vector traits for iterator functions.
@@ -64,7 +64,7 @@ namespace ST
 		}
 
 		// base Function; return constant forward iterator from constant reverse iterator.
-		ST::vector_const_iterator<T> base()
+		ST::vector_const_iterator<T, Alloc> base()
 		{
 			// Test iterator.
 			ValidityTest();
@@ -237,7 +237,7 @@ namespace ST
 
 	public:
 		// reverse_iterator parameterized Constructor; Initialized the members by given values.
-		vector_const_reverse_iterator(const vector<T>* vector, const T* data, int idx)
+		vector_const_reverse_iterator(const vector<T, Alloc>* vector, const T* data, int idx)
 			: m_vectorPtr(vector)
 			, m_pData(data)
 			, m_idx(idx)
@@ -256,6 +256,6 @@ namespace ST
 		}
 
 		// Declare friend to access private members of vector.
-		friend class ST::vector<T>;
+		friend class ST::vector<T, Alloc>;
 	};
 };

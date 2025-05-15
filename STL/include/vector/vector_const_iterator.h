@@ -20,17 +20,17 @@
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Alloc>
 	class vector;
 
-	template <typename T>
+	template <typename T, typename Alloc = STAllocator<T>>
 	class vector_const_iterator
 	{
 	private:
-		const T*				m_pData;		// Constant type data pointer
-		const ST::vector<T>*	m_vectorPtr;	// Constant type vector pointer
-		int						m_idx;			// Index variable (cannot be constant; need to point different elements)
-		bool					m_isValid;		// Validity variable (cannot be constant; need to check validity)
+		const T*					m_pData;		// Constant type data pointer
+		const ST::vector<T, Alloc>*	m_vectorPtr;	// Constant type vector pointer
+		int							m_idx;			// Index variable (cannot be constant; need to point different elements)
+		bool						m_isValid;		// Validity variable (cannot be constant; need to check validity)
 
 	public:
 		// Vector traits for iterator functions.
@@ -235,7 +235,7 @@ namespace ST
 
 	public:
 		// iterator parameterized Constructor; Initialized the members by given values.
-		vector_const_iterator(const vector<T>* vector, const T* data, int idx)
+		vector_const_iterator(const vector<T, Alloc>* vector, const T* data, int idx)
 			: m_vectorPtr(vector)
 			, m_pData(data)
 			, m_idx(idx)
@@ -251,5 +251,6 @@ namespace ST
 		~vector_const_iterator()
 		{
 		}
+		friend class ST::vector<T, Alloc>;
 	};
 }

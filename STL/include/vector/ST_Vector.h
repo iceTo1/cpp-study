@@ -6,6 +6,7 @@
 * GitHub: https://github.com/remydzn/cpp-study
 * Date: Apr 8~12, 2025
 * Edit: Apr 28~30, 2025
+* Adding Custom Allocator: May 14~15, 2025
 *
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.
@@ -20,16 +21,18 @@
 #include <stdexcept>
 #include "../vector/vector_iterators.h"
 #include "../utility/utility.h"
+#include "../allocator/ST_Allocator.h"
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Alloc = STAllocator<T>>
 	class vector
 	{
 	private:
-		T* m_pData;		// Use pointer for Dynamic Memory Allocation (HEAP)
-		int m_Size;		// Element count
-		int m_Capacity; // Max element count
+		Alloc m_Allocator;	// Allocator instance
+		T* m_pData;			// Use pointer for Dynamic Memory Allocation (HEAP)
+		int m_Size;			// Element count
+		int m_Capacity;		// Max element count
 
 	public:
 		// Assigning traits for iterator functions.
@@ -132,16 +135,16 @@ namespace ST
 	};
 
 	// Default Constructor; capacity to 0.
-	template <typename T>
-	vector<T>::vector()
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::vector()
 		: m_pData(nullptr)
 		, m_Size(0)
 		, m_Capacity(0)
 	{ }
 
 	// Parameterized Constructor; initialize with size, value.
-	template <typename T>
-	vector<T>::vector(int size, const T& initial_value)
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::vector(int size, const T& initial_value)
 		: m_pData(nullptr)
 		, m_Size(size)
 		, m_Capacity(size)
@@ -153,23 +156,23 @@ namespace ST
 		}
 
 		// Initialize the size of vector by given value, capacity by size.
-		m_pData = new T[m_Capacity];
+		m_pData = m_Allocator.allocate(m_Capacity);
 
 		for (int i = 0; i < m_Size; ++i)
 		{
-			m_pData[i] = initial_value;
+			m_Allocator.construct(m_pData + i, initial_value);
 		}
 	}
 
 	// Parameterized Constructor; initialize size only, value to "default of T type".
-	template <typename T>
-	vector<T>::vector(int size)
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::vector(int size)
 		: vector(size, T())
 	{ }
 
 	// List initializing Constructor; Initialize with list
-	template<typename T>
-	vector<T>::vector(std::initializer_list<T> init)
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::vector(std::initializer_list<T> init)
 		:vector()
 	{
 		for (const T& val : init)
@@ -179,8 +182,8 @@ namespace ST
 	}
 
 	// Copy Constructor; initialize with same values of other.
-	template <typename T>
-	vector<T>::vector(const vector& other)
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::vector(const vector& other)
 		: m_pData(nullptr)
 		, m_Size(other.m_Size)
 		, m_Capacity(other.m_Capacity)
@@ -196,20 +199,19 @@ namespace ST
 	}
 
 	// Destructor; free memory, reinitialize pointer.
-	template <typename T>
-	vector<T>::~vector()
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::~vector()
 	{
-		// Free allocated memories.
-		delete[] m_pData;
-		// Prevent dangling pointer.
-		m_pData = nullptr;
+		for (int i = 0; i < m_Size; ++i)
+		{
+			m_Allocator.destroy(m_pData + i);
+		}
 
-		m_Size = 0;
-		m_Capacity = 0;
+		m_Allocator.deallocate(m_pData, m_Capacity);
 	}
 
-	template<typename T>
-	void vector<T>::reserve(const int& size)
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::reserve(const int& size)
 	{
 		// if resize_count is smaller than capacity,
 		if (size <= this->m_Capacity)
@@ -219,16 +221,17 @@ namespace ST
 		}
 
 		// Declare a temporary container with the resize count size.
-		T* pTemp = new T[size]{};
+		T* pTemp = m_Allocator.allocate(size);
 
 		// Copy existing data to temporary container.
-		for (int i = 0; i < this->m_Size; ++i)
+		for (int i = 0; i < m_Size; ++i)
 		{
-			pTemp[i] = ST::move(m_pData[i]);
+			m_Allocator.construct(pTemp + i, ST::move(m_pData[i]));
+			m_Allocator.destroy(m_pData + i);
 		}
 
 		// Free the memory of the old container, reassign the pointer to the new container.
-		delete[] this->m_pData;
+		m_Allocator.deallocate(m_pData, m_Capacity);
 		m_pData = pTemp;
 
 		// Adjust the capacity.
@@ -236,8 +239,8 @@ namespace ST
 	}
 
 	// push_back Funtion; add data to the end.
-	template <typename T>
-	void vector<T>::push_back(const T& data)
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::push_back(const T& data)
 	{
 		// if capacity is not enough,
 		if (m_Size >= m_Capacity)
@@ -247,12 +250,13 @@ namespace ST
 		}
 
 		// Add data.
-		m_pData[m_Size++] = data;
+		m_Allocator.construct(m_pData + m_Size, data);
+		++m_Size;
 	}
 
 	// pop_back Function; remove last data.
-	template <typename T>
-	void vector<T>::pop_back()
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::pop_back()
 	{
 		// if the vector is empty,
 		if (this->empty())
@@ -262,15 +266,15 @@ namespace ST
 		}
 
 		// Re-initialize the last element with default value of the data type
-		m_pData[m_Size - 1] = T(); // optional, but I tried to secure the data
+		m_Allocator.destroy(m_pData + (m_Size - 1)); // optional, but I tried to secure the data
 
 		// Decrase the size.
 		--m_Size;
 	}
 
 	// resize Function; resize the capacity of the vector, initialize the remining data with default value.
-	template <typename T>
-	void vector<T>::resize(int newsize)
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::resize(int newsize)
 	{
 		// If the new size is bigger than capacity,
 		if (newsize > this->m_Capacity)
@@ -285,7 +289,16 @@ namespace ST
 			// Set the remaining data as default value by type.
 			for (int i = m_Size; i < newsize; ++i)
 			{
-				m_pData[i] = T();
+				m_Allocator.construct(m_pData + i, T());
+			}
+		}
+		// If the newsize is smaller than the previous size,
+		else
+		{
+			// Release the exceeding elements.
+			for (int i = newsize; i < m_Size; ++i)
+			{
+				m_Allocator.destroy(m_pData + i);
 			}
 		}
 
@@ -294,8 +307,8 @@ namespace ST
 	}
 
 	// front Function; returns the first element. 
-	template <typename T>
-	T& vector<T>::front()
+	template <typename T, typename Alloc>
+	T& vector<T, Alloc>::front()
 	{
 		// if the vector is empty,
 		if (this->empty())
@@ -309,8 +322,8 @@ namespace ST
 	}
 
 	// back Function; returns the last element.
-	template <typename T>
-	T& vector<T>::back()
+	template <typename T, typename Alloc>
+	T& vector<T, Alloc>::back()
 	{
 		// if the vector is empty,
 		if (this->empty())
@@ -323,8 +336,8 @@ namespace ST
 	}
 
 	// at Function; returns data at "idx" index, checks bound.
-	template <typename T>
-	T& vector<T>::at(int idx)
+	template <typename T, typename Alloc>
+	T& vector<T, Alloc>::at(int idx)
 	{
 		// if the vector is empty,
 		if (this->empty())
@@ -345,8 +358,8 @@ namespace ST
 	}
 
 	// at const Function; at Function for constant objects.
-	template <typename T>
-	const T& vector<T>::at(int idx) const
+	template <typename T, typename Alloc>
+	const T& vector<T, Alloc>::at(int idx) const
 	{
 		// if the vector is empty,
 		if (this->empty())
@@ -366,8 +379,8 @@ namespace ST
 	}
 
 	// clear Function; erase all data by initializing to default value, capacity stays the same.
-	template <typename T>
-	void vector<T>::clear()
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::clear()
 	{
 		// if the vector is empty,
 		if (empty())
@@ -381,7 +394,7 @@ namespace ST
 		for (int i = 0; i < m_Size; ++i)
 		{
 			// Re-initialize the values by the default value of its data type
-			m_pData[i] = T();
+			m_Allocator.destroy(m_pData + i);
 		}
 
 		// Update the size to 0.
@@ -389,8 +402,8 @@ namespace ST
 	}
 
 	// Operator []; returns data at "idx" index.
-	template <typename T>
-	T& vector<T>::operator[](int idx)
+	template <typename T, typename Alloc>
+	T& vector<T, Alloc>::operator[](int idx)
 	{
 		// operator[] omits bound check for faster performance with risk; undefined behavior.
 		// return "idx"th data.
@@ -398,8 +411,8 @@ namespace ST
 	}
 
 	// constant Operator[]; Constant version of Operator[]
-	template <typename T>
-	const T& vector<T>::operator[] (int idx) const
+	template <typename T, typename Alloc>
+	const T& vector<T, Alloc>::operator[] (int idx) const
 	{
 		// operator[] omits bound check for faster performance with risk; undefined behavior.
 		// Return the data of given index.
@@ -407,8 +420,8 @@ namespace ST
 	}
 
 	// Operator =; assigns the other vector to this vector.
-	template <typename T>
-	vector<T>& vector<T>::operator=(const vector<T>& other)
+	template <typename T, typename Alloc>
+	vector<T, Alloc>& vector<T, Alloc>::operator= (const vector<T, Alloc>& other)
 	{
 		// if the other vector is the same as this vector,
 		if (this == &other)
@@ -418,34 +431,41 @@ namespace ST
 		}
 
 		// release the pre-allocated memory
-		delete[] this->m_pData;
+		for (int i = 0; i < m_Size; ++i)
+		{
+			m_Allocator.destroy(m_pData + i);
+		}
+		m_Allocator.deallocate(m_pData, m_Capacity);
 
 		// perform deep copy
-		this->m_pData = new T[other.capacity()];
-		this->m_Size = other.size();
-		this->m_Capacity = other.capacity();
+		this->m_Capacity = other.m_Capacity;
+		this->m_pData = m_Allocator.allocate(m_Capacity);
+		this->m_Size = other.m_Size;
 
 		for (int i = 0; i < m_Size; ++i)
 		{
-			this->m_pData[i] = other.at(i);
+			m_Allocator.construct(m_pData + i, other.m_pData[i]);
 		}
 
 		return *this;
 	}
-
 	
 	// erase Function; erase the pointed element.
-	template <typename T>
-	typename vector<T>::iterator vector<T>::erase(iterator& other)
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator& other)
 	{
 		// Test iterator.
 		other.ValidityTest();
 		other.IndexTest();
 
+		// Release the memory the iterator is pointing to.
+		m_Allocator.destroy(m_pData + other.m_idx);
+
 		// Overlap the pointed element, shift elements after erased element to the left.
 		for (int i = other.m_idx; i < m_Size - 1; ++i)
 		{
-			m_pData[i] = m_pData[i + 1];
+			m_Allocator.construct(m_pData + i, ST::move(m_pData [i + 1]));
+			m_Allocator.destroy(m_pData + i + 1);
 		}
 
 		// Decrease the size.
@@ -457,8 +477,8 @@ namespace ST
 	}
 
 	// insert Function; insert the value to the left of the pointed position.
-	template <typename T>
-	typename vector<T>::iterator vector<T>::insert(iterator pos, const T& val)
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator pos, const T& val)
 	{
 		// If the capacity is not enough to insert,
 		if (m_Size + 1 > m_Capacity)
@@ -478,11 +498,12 @@ namespace ST
 		for (int i = m_Size; i > pos.m_idx; --i)
 		{
 			// Shift from right to keep the data.
-			m_pData[i] = m_pData[i - 1];
+			m_Allocator.construct(m_pData + i, ST::move(m_pData[i - 1]));
+			m_Allocator.destroy(m_pData + i - 1);
 		}
 
 		// Add the value to the desired position.
-		m_pData[pos.m_idx] = val;
+		m_Allocator.construct(m_pData + pos.m_idx, val);
 
 		// Increase size.
 		++m_Size;
