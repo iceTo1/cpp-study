@@ -21,19 +21,19 @@
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Alloc>
 	class Node;
 
-	template <typename T>
+	template <typename T, typename Alloc>
 	class list;
 
-	template <typename T>
+	template <typename T, typename Alloc>
 	class list_iterator
 	{
 	private:
-		list<T>*	m_pList;	// Member pointer to store address of list.
-		Node<T>*	m_pNode;	// Member pointer to store address of node.
-		bool		m_isValid;	// Member variable to test validity of iterator.
+		list<T, Alloc>*	m_pList;	// Member pointer to store address of list.
+		Node<T, Alloc>*	m_pNode;	// Member pointer to store address of node.
+		bool			m_isValid;	// Member variable to test validity of iterator.
 
 	public:
 		// List traits for iterator functions.
@@ -138,7 +138,7 @@ namespace ST
 		{
 		}
 		// Parameterized constructor; Initialize the member variables with given data.
-		list_iterator(list<T>* list, Node<T>* node)
+		list_iterator(list<T, Alloc>* list, Node<T, Alloc>* node)
 			: m_pList(list)
 			, m_pNode(node)
 			, m_isValid(false)
@@ -153,6 +153,6 @@ namespace ST
 		{
 		}
 
-		friend class list<T>;	// Allow access to private members by list.
+		friend class list<T, Alloc>;	// Allow access to private members by list.
 	};
 }

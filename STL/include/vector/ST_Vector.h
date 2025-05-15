@@ -6,7 +6,7 @@
 * GitHub: https://github.com/remydzn/cpp-study
 * Date: Apr 8~12, 2025
 * Edit: Apr 28~30, 2025
-* Adding Custom Allocator: May 14~15, 2025
+* Added Custom Allocator: May 14~15, 2025
 *
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.

@@ -6,6 +6,7 @@
 * GitHub: https://github.com/remydzn/cpp-study
 * Date: Apr 16~20, 2025
 * Edit: Apr 28~30, 2025
+* Added Custom Allocator: May 15, 2025
 *
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.
@@ -19,27 +20,33 @@
 #define STList_20250430
 #include <stdexcept>
 #include "../list/list_iterators.h"
+#include "../allocator/ST_Allocator.h"
 
 
 namespace ST
 {
 	// Declaration of list class
-	template <typename T>
+	template <typename T, typename Alloc>
 	class list;
 
 	// Node class
-	template <typename T>
+	template <typename T, typename Alloc = STAllocator<T>>
 	class Node
 	{
-		friend class list<T>;	// Allow access to private members to list class.
-		friend class ST::list_iterator<T>;
-		friend class ST::list_const_iterator<T>;
-		friend class ST::list_reverse_iterator<T>;
-		friend class ST::list_const_reverse_iterator<T>;
+		friend class list<T, Alloc>;	// Allow access to private members to list class.
+		friend class ST::list_iterator<T, Alloc>;
+		friend class ST::list_const_iterator<T, Alloc>;
+		friend class ST::list_reverse_iterator<T, Alloc>;
+		friend class ST::list_const_reverse_iterator<T, Alloc>;
 	private:
 		T		m_Data;			// Data stored in the node.
-		Node* m_NextNode;		// Node pointer for next node.
-		Node* m_PrevNode;		// Node pointer for previous node.
+		Node*	m_NextNode;		// Node pointer for next node.
+		Node*	m_PrevNode;		// Node pointer for previous node.
+		// Alias for allocator
+		using NodeType = Node<T, Alloc>;
+		using NodeAllocator = typename Alloc::template rebind<NodeType>::other;
+
+		NodeAllocator m_NodeAllocator;	// Member variable for allocator.
 
 	public:
 		// Assigning traits for iterator functions.
@@ -52,10 +59,10 @@ namespace ST
 		using difference_type = int;
 
 		// Using shorter name for iterators.
-		using iterator = ST::list_iterator<T>;
-		using const_iterator = ST::list_const_iterator<T>;
-		using reverse_iterator = ST::list_reverse_iterator<T>;
-		using const_reverse_iterator = ST::list_const_reverse_iterator<T>;
+		using iterator = ST::list_iterator<T, Alloc>;
+		using const_iterator = ST::list_const_iterator<T, Alloc>;
+		using reverse_iterator = ST::list_reverse_iterator<T, Alloc>;
+		using const_reverse_iterator = ST::list_const_reverse_iterator<T, Alloc>;
 
 	public:
 		// Default Constructor: Initialize members to their default values.
@@ -81,17 +88,23 @@ namespace ST
 	};
 
 	// List class
-	template <typename T>
+	template <typename T, typename Alloc = STAllocator<T>>
 	class list
 	{
 	private:
-		Node<T>* m_HeadNode;		// Member pointer to store the first node.
-		Node<T>* m_TailNode;		// Member pointer to store the last node.
-		int			m_Count;		// Member variable to store node count.
+		Node<T, Alloc>* m_HeadNode;		// Member pointer to store the first node.
+		Node<T, Alloc>* m_TailNode;		// Member pointer to store the last node.
+		int				m_Count;		// Member variable to store node count.
+
+		// Matching with Node Allocator.
+		using NodeType = Node<T, Alloc>;
+		using NodeAllocator = typename Alloc::template rebind<NodeType>::other;
+
+		NodeAllocator m_NodeAllocator;
 
 	private:
-		Node<T>* merge_sort(Node<T>* head);			// Helper function for sort Function.
-		Node<T>* merge(Node<T>* l1, Node<T>* l2);	// Helper function for merge_sort Function.
+		Node<T, Alloc>* merge_sort(Node<T, Alloc>* head);			// Helper function for sort Function.
+		Node<T, Alloc>* merge(Node<T, Alloc>* l1, Node<T, Alloc>* l2);	// Helper function for merge_sort Function.
 
 	public:
 		// Assigning traits for iterator functions.
@@ -104,10 +117,10 @@ namespace ST
 		using difference_type = int;
 
 		// Using shorter name for iterators.
-		using iterator = ST::list_iterator<T>;
-		using const_iterator = ST::list_const_iterator<T>;
-		using reverse_iterator = ST::list_reverse_iterator<T>;
-		using const_reverse_iterator = ST::list_const_reverse_iterator<T>;
+		using iterator = ST::list_iterator<T, Alloc>;
+		using const_iterator = ST::list_const_iterator<T, Alloc>;
+		using reverse_iterator = ST::list_reverse_iterator<T, Alloc>;
+		using const_reverse_iterator = ST::list_const_reverse_iterator<T, Alloc>;
 
 	public:
 		// List Functions.
@@ -173,16 +186,16 @@ namespace ST
 	};
 
 	// Default Constructor: Initialize members to their default values.
-	template <typename T>
-	list<T>::list()
+	template <typename T, typename Alloc>
+	list<T, Alloc>::list()
 		: m_HeadNode(nullptr)
 		, m_TailNode(nullptr)
 		, m_Count(0)
 	{
 	}
 
-	template<typename T>
-	list<T>::list(std::initializer_list<T> init)
+	template <typename T, typename Alloc>
+	list<T, Alloc>::list(std::initializer_list<T> init)
 		: list()
 	{
 		for (const T& val : init)
@@ -192,8 +205,8 @@ namespace ST
 	}
 
 	// Destructor: Release all nodes, reinitialize members to their default values.
-	template <typename T>
-	list<T>::~list()
+	template <typename T, typename Alloc>
+	list<T, Alloc>::~list()
 	{
 		// Declare a temporary node pointer to iterate through from head node.
 		Node<T>* temp = m_HeadNode;
@@ -206,7 +219,8 @@ namespace ST
 			// Move temp node to the next node.
 			temp = temp->m_NextNode;
 			// Release the memory of delete node.
-			delete deleteNode;
+			m_NodeAllocator.destroy(deleteNode);
+			m_NodeAllocator.deallocate(deleteNode, 1);
 		}
 
 		// After deleting every node, reinitialize the list members to their default values.
@@ -216,15 +230,15 @@ namespace ST
 	}
 
 	// size Function; Return the node count.
-	template <typename T>
-	inline int list<T>::size() const noexcept
+	template <typename T, typename Alloc>
+	inline int list<T, Alloc>::size() const noexcept
 	{
 		return m_Count;
 	}
 
 	// front Function; Return the first data.
-	template<typename T>
-	T& list<T>::front()
+	template <typename T, typename Alloc>
+	T& list<T, Alloc>::front()
 	{
 		// If the list is empty,
 		if (empty())
@@ -238,8 +252,8 @@ namespace ST
 	}
 
 	// constant front Function; Return the first data as constant.
-	template<typename T>
-	const T& list<T>::front() const
+	template <typename T, typename Alloc>
+	const T& list<T, Alloc>::front() const
 	{
 		// If the list is empty,
 		if (empty())
@@ -253,8 +267,8 @@ namespace ST
 	}
 
 	// back Function; Return the last data. 
-	template <typename T>
-	T& list<T>::back()
+	template <typename T, typename Alloc>
+	T& list<T, Alloc>::back()
 	{
 		if (empty())
 		{
@@ -265,8 +279,8 @@ namespace ST
 	}
 
 	// constant back Function; Return the last data as constant. 
-	template <typename T>
-	const T& list<T>::back() const
+	template <typename T, typename Alloc>
+	const T& list<T, Alloc>::back() const
 	{
 		if (empty())
 		{
@@ -277,8 +291,8 @@ namespace ST
 	}
 
 	// sort Function; Sort the data inside the list.
-	template<typename T>
-	void list<T>::sort()
+	template <typename T, typename Alloc>
+	void list<T, Alloc>::sort()
 	{
 		if (this->m_Count <= 1)
 		{
@@ -297,8 +311,8 @@ namespace ST
 	}
 
 	// Helper function for sort Function.
-	template<typename T>
-	Node<T>* list<T>::merge_sort(Node<T>* head)
+	template <typename T, typename Alloc>
+	Node<T, Alloc>* list<T, Alloc>::merge_sort(Node<T, Alloc>* head)
 	{
 		if (!head || !head->m_NextNode)
 		{
@@ -327,11 +341,11 @@ namespace ST
 		return merge(left, right);
 	}
 
-	template <typename T>
-	Node<T>* list<T>::merge(Node<T>* l1, Node<T>* l2)
+	template <typename T, typename Alloc>
+	Node<T, Alloc>* list<T, Alloc>::merge(Node<T, Alloc>* l1, Node<T, Alloc>* l2)
 	{
-		Node<T> temp;
-		Node<T>* tail = &temp;
+		Node<T, Alloc> temp;
+		Node<T, Alloc>* tail = &temp;
 
 		while (l1 && l2)
 		{
@@ -366,8 +380,8 @@ namespace ST
 	}
 
 	// erase Function; Erase the data that the given iterator is pointing.
-	template<typename T>
-	typename list<T>::iterator list<T>::erase(const typename list<T>::iterator& pos)
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::iterator list<T, Alloc>::erase(const typename list<T, Alloc>::iterator& pos)
 	{
 		// If the list is already empty,
 		if (empty())
@@ -406,7 +420,8 @@ namespace ST
 		}
 
 		// Release memory of the deleting node.
-		delete deleteNode;
+		m_NodeAllocator.destroy(deleteNode);
+		m_NodeAllocator.deallocate(deleteNode, 1);
 		// Prevent dangling pointer.
 		deleteNode = nullptr;
 
@@ -417,8 +432,8 @@ namespace ST
 	}
 
 	// insert Function; Insert data to the left of the iterator.
-	template<typename T>
-	typename list<T>::iterator list<T>::insert(const T& data, const typename list<T>::iterator& iter)
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::iterator list<T, Alloc>::insert(const T& data, const typename list<T, Alloc>::iterator& iter)
 	{
 		// Check iterator.
 		if (this != iter.m_pList)
@@ -456,7 +471,8 @@ namespace ST
 		}
 
 		// Declare a new node with the given data.
-		Node<T>* newNode = new Node<T>(data, currNode, prevNode);
+		Node<T>* newNode = m_NodeAllocator.allocate(1);
+		m_NodeAllocator.construct(newNode, data, currNode, prevNode);
 
 		// If the current node is pointing to nothing (end iterator),
 		if (!currNode)
@@ -490,19 +506,20 @@ namespace ST
 	}
 
 	// empty Function; Check if the list has no node inside.
-	template <typename T>
-	inline bool list<T>::empty() const
+	template <typename T, typename Alloc>
+	inline bool list<T, Alloc>::empty() const
 	{
 		// If the list is empty, return true.
 		return (m_Count == 0);
 	}
 
 	// push_back Function; Add data to the end of the list.
-	template<typename T>
-	void list<T>::push_back(const T& data)
+	template <typename T, typename Alloc>
+	void list<T, Alloc>::push_back(const T& data)
 	{
 		// Create a new node that has data, pointing to nothing for next node, and tail node for previous node.
-		Node<T>* newNode = new Node<T>(data, nullptr, m_TailNode);
+		Node<T>* newNode = m_NodeAllocator.allocate(1);
+		m_NodeAllocator.construct(newNode, data, nullptr, m_TailNode);
 		// If the list was empty,
 		if (empty())
 		{
@@ -524,11 +541,12 @@ namespace ST
 	}
 
 	// push_front Function; Add data to the front of the list.
-	template <typename T>
-	void list<T>::push_front(const T& data)
+	template <typename T, typename Alloc>
+	void list<T, Alloc>::push_front(const T& data)
 	{
 		// Create a new node that has data, pointing to head node for next node, and nothing for previous node.
-		Node<T>* newNode = new Node<T>(data, m_HeadNode, nullptr);
+		Node<T>* newNode = m_NodeAllocator.allocate(1);
+		m_NodeAllocator.construct(newNode, data, m_HeadNode, nullptr);
 
 		// If the list was empty,
 		if (empty())
@@ -550,8 +568,8 @@ namespace ST
 	}
 
 	// popback Function; Remove the last node of the list.
-	template <typename T>
-	void list<T>::pop_back()
+	template <typename T, typename Alloc>
+	void list<T, Alloc>::pop_back()
 	{
 		// If the list was empty,
 		if (empty())
@@ -579,7 +597,8 @@ namespace ST
 		}
 
 		// Release memory of the previous tail node.
-		delete deleteNode;
+		m_NodeAllocator.destroy(deleteNode);
+		m_NodeAllocator.deallocate(deleteNode, 1);
 		// Prevent dangling pointer.
 		deleteNode = nullptr;
 
@@ -588,8 +607,8 @@ namespace ST
 	}
 
 	// popfront Function; Remove the first node of the list.
-	template <typename T>
-	void list<T>::pop_front()
+	template <typename T, typename Alloc>
+	void list<T, Alloc>::pop_front()
 	{
 		// If the list was empty,
 		if (empty())
@@ -618,7 +637,8 @@ namespace ST
 		}
 
 		// Release the memory of the previous head node.
-		delete deleteNode;
+		m_NodeAllocator.destroy(deleteNode);
+		m_NodeAllocator.deallocate(deleteNode, 1);
 		// Prevent dangling pointer.
 		deleteNode = nullptr;
 
@@ -627,8 +647,8 @@ namespace ST
 	}
 
 	// clear Function; Remove all the nodes from the list.
-	template <typename T>
-	void list<T>::clear()
+	template <typename T, typename Alloc>
+	void list<T, Alloc>::clear()
 	{
 		// If the list is already empty,
 		if (empty())
@@ -648,7 +668,8 @@ namespace ST
 			// Advance the pointing node.
 			pointNode = pointNode->m_NextNode;
 			// Release memory of the delete node.
-			delete deleteNode;
+			m_NodeAllocator.destroy(deleteNode);
+			m_NodeAllocator.deallocate(deleteNode, 1);
 		}
 
 		// Update the head and tail nodes to point nothing.

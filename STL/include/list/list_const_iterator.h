@@ -20,19 +20,19 @@
 
 namespace ST
 {
-	template <typename T>
+	template <typename T, typename Alloc>
 	class Node;
 
-	template <typename T>
+	template <typename T, typename Alloc>
 	class list;
 
-	template <typename T>
+	template <typename T, typename Alloc>
 	class list_const_iterator
 	{
 	private:
-		const list<T>*	m_pList;	// Member pointer to store address of list (constant).
-		const Node<T>*	m_pNode;	// Member pointer to store address of node (constant).
-		bool			m_isValid;	// Member variable to test validity of iterator.
+		const list<T, Alloc>*	m_pList;	// Member pointer to store address of list (constant).
+		const Node<T, Alloc>*	m_pNode;	// Member pointer to store address of node (constant).
+		bool					m_isValid;	// Member variable to test validity of iterator.
 	public:
 		// List traits for iterator functions.
 		using iterator_category = ST::bidirectional_iterator_tag;
@@ -137,7 +137,7 @@ namespace ST
 		{}
 
 		// Parameterized constructor; Initialize the member variables with given data.
-		list_const_iterator(const list<T>* list, const Node<T>* node)
+		list_const_iterator(const list<T, Alloc>* list, const Node<T, Alloc>* node)
 			: m_pList(list)
 			, m_pNode(node)
 			, m_isValid(false)
@@ -152,6 +152,6 @@ namespace ST
 		~list_const_iterator()
 		{}
 
-		friend class list<T>;	// Allow access to private members by list.
+		friend class list<T, Alloc>; // Allow access to private members by list.
 	};
 }
