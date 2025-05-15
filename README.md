@@ -8,7 +8,6 @@ I am currently studying Computer Engineering at the University of Utah.
 In addition to what I learn in class, I use this space to explore my own interests and deepen my understanding of C++ through hands-on implementation.
 
 
-
 ## Purpose
 
 The goal of this repository is to reinforce my C++ skills beyond the classroom by:
@@ -20,8 +19,16 @@ The goal of this repository is to reinforce my C++ skills beyond the classroom b
 ## What’s Inside
 
 - Custom `vector<T>` implementation
-- Custon `list<T>` implementation
-- Forward and reverse iterators
+- Custom `list<T>` implementation
+- Custom `iterator` header implementation
+- Custom `allocator` implementation, adapted to custom containers
+- Custom `Binary Search Tree` implementation
+- Custom `AVL Tree` implementation
+- Custom `Min/Max Heap Tree` implementation
+- Custom `algorithm` header implementation
+- Custom `functional` header implementation
+- Custom `utility` header implementation
+- Custom `type_traits` header implementation
 - Leetcode problem solutions with description
 (More content will be added.)
 
