@@ -1,0 +1,36 @@
+# Ignore Visual Studio user-specific and IntelliSense files
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.VC.db
+*.VC.opendb
+*.ipch
+
+# Build output
+*.obj
+*.log
+*.tlog
+*.tmp
+*.pdb
+*.ilk
+*.exe
+*.dll
+*.lib
+*.out
+*.idb
+*.recipe
+*.lastbuildstate
+x64/
+Debug/
+
+# Other
+*.cache
+*.bak
+*.ncb
+*.sdf
+
+# Debug & Release folders
+Debug/
+Release/
