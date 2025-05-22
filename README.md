@@ -29,6 +29,9 @@ The goal of this repository is to reinforce my C++ skills beyond the classroom b
 - Custom `functional` header implementation
 - Custom `utility` header implementation
 - Custom `type_traits` header implementation
+
+- Custom `cout`, `cin`, `endl` implementation
+
 - Leetcode problem solutions with description
 (More content will be added.)
 
