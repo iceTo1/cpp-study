@@ -38,8 +38,8 @@ vec.push_back(10);
 ---
 
 ## Educational Attribution
-" Inspired by Code Blacksmith
-" Created for educational purposes by Seungtack Lee
+> Inspired by Code Blacksmith
+> Created for educational purposes by Seungtack Lee
 
 Unauthorized use in academic or professional submissions without proper credit is prohibited.
 
