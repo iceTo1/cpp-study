@@ -55,7 +55,6 @@ I attempted to replicate the `utility.h` for my STL cloning project in a separat
 - If the value type is lvalue reference, store the type without `&`.
 - If the value type is rvalue reference, store the type without `&&`.
 - If the value type is without reference, store the raw type.
-- 
 
 ### ⚒️ `swap.h`
 - This STL-style `swap()` uses `move()` to avoid copying values when swapping.
@@ -63,7 +62,7 @@ I attempted to replicate the `utility.h` for my STL cloning project in a separat
 
 ### ⚒️ `utility.h`
 - This file simply includes the utility headers.
-- The users can utilize both algorithms just by including this header.
+- The users can utilize all algorithms just by including this header.
 ---
 
 ## 📚 Educational Attribution
