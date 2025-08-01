@@ -4,7 +4,7 @@
 * Custom is_lvalue_reference implementation by Seungtack Lee
 * Author: Lee, Seungtack
 * GitHub: https://github.com/remydzn/cpp-study
-* Date: May 7, 2025
+* Date: Aug 1, 2025
 *
 * <Authorship Verification>
 * This section exists to verify that this project was originally created by Seungtack Lee.
